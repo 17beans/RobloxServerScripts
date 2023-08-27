@@ -14,8 +14,8 @@ export const LuaCodePeriodicFunctinSystem = `
 [완료] 바이러스 - 랜덤으로 감염되고 감염된 사람과 접촉하면 체력 깎임
 [완료] 산성비 - 비를 맞으면 체력 깎임
 [완료] 우박 - 하늘에서 우박이 떨어지고 맞으면 체력 깎임
-번개 - 맞으면 즉사
 토네이도 - 토네이도에 닿으면 날라감
+번개 - 맞으면 즉사
 
 ]]
 
@@ -249,10 +249,44 @@ local function OnPlayerAdded(player: Player)
 	local vInShelter = Instance.new('BoolValue')
 	vInShelter.Parent = player
 	vInShelter.Name = 'InShelter'
+	vInShelter:GetPropertyChangedSignal('Value'):Connect(function()
+		pcall(function()
+			if vInShelter.Value then
+				local Found = player.Character:FindFirstChildOfClass('ForceField')
+				if Found then return end
+				local ForceField = Instance.new('ForceField')
+				ForceField.Parent = player.Character
+
+			else
+
+				local Found: ForceField = player.Character:FindFirstChildOfClass('ForceField')
+				if not Found then return end
+				Found:Destroy()
+				Found = nil
+			end
+		end)
+	end)
 
 	local vNoDamage = Instance.new('BoolValue')
 	vNoDamage.Parent = player
 	vNoDamage.Name = 'NoDamage'
+	vNoDamage:GetPropertyChangedSignal('Value'):Connect(function()
+		pcall(function()
+			if vNoDamage.Value then
+				local Found = player.Character:FindFirstChildOfClass('ForceField')
+				if Found then return end
+				local ForceField = Instance.new('ForceField')
+				ForceField.Parent = player.Character
+
+			else
+
+				local Found: ForceField = player.Character:FindFirstChildOfClass('ForceField')
+				if not Found then return end
+				Found:Destroy()
+				Found = nil
+			end
+		end)
+	end)
 
 end
 ----
