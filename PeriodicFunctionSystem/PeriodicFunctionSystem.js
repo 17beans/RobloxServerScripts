@@ -13,6 +13,8 @@ print('test02')
 
 
 --// Presetup //--
+Players.PlayerAdded:Connect(OnPlayerAdded)
+
 local FolderAutoSetup = script:FindFirstChild('AutoSetup')
 if FolderAutoSetup then
 	for _, Service in pairs(FolderAutoSetup:GetChildren()) do
@@ -232,7 +234,7 @@ end
 print('test08')
 
 
-local function OnPlayerAdded(player: Player)
+function OnPlayerAdded(player: Player)
 
 	print('test01')
 	local vInShelter = Instance.new('BoolValue')
@@ -295,8 +297,7 @@ print('test10')
 
 
 
---// Main //
-Players.PlayerAdded:Connect(OnPlayerAdded)
+--// Main //--
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
