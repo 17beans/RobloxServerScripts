@@ -2,11 +2,13 @@ export const LuaCodePeriodicFunctinSystem = `
 
 
 
+print('test01')
 --// Services //--
 local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Debris = game:GetService('Debris')
 ----
+print('test02')
 
 
 
@@ -39,6 +41,7 @@ if FolderAutoSetup then
 	end
 end
 ----
+print('test03')
 
 
 
@@ -62,6 +65,7 @@ local PERIODIC_FUNCTION_ALERT_TIME = config.PeriodicFunctionAlertTime.Value
 local fShelters = workspace.PeriodicFunctionSystem.Shelters
 
 ----
+print('test04')
 
 
 
@@ -71,6 +75,7 @@ local REvtShowPictogram = ReplicatedStorage.PeriodicFunctionSystem.Remotes.ShowP
 local BEvtPausePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.PausePeriodicFunction
 local BEvtResumePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.ResumePeriodicFunction
 ----
+print('test05')
 
 
 
@@ -87,6 +92,7 @@ local periodicFunctionModules = {}
 local coroutines = {}
 local currentModule: { ['Execute']: ()->(), ['Cancel']: ()->() }
 ----
+print('test07')
 
 
 
@@ -223,6 +229,7 @@ local function InitializeSafeZones()
 	end
 
 end
+print('test08')
 
 
 local function OnPlayerAdded(player: Player)
@@ -276,6 +283,7 @@ local function OnPlayerAdded(player: Player)
 
 end
 ----
+print('test09')
 
 
 
@@ -283,6 +291,7 @@ end
 InitializePeriodicFunctions()
 InitializeSafeZones()
 ----
+print('test10')
 
 
 
@@ -291,4 +300,5 @@ Players.PlayerAdded:Connect(OnPlayerAdded)
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
-----`
+----
+print('test11')`
