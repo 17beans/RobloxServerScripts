@@ -2,25 +2,6 @@ export const LuaCodePeriodicFunctinSystem = `
 
 
 
---[[
- Script by bean7189
- 이 스크립트 전체 내용은 bean7189에 의해서만 작성되었으며, bean7189 이외에 다른 사람에 의해 참고, 이용 등 유출될 수 없습니다.
-
-
-[완료] 지진 - 파트 흔들리게
-[완료] 대설 - 모든 파트가 미끄러워짐
-[완료] 눈보라 - 움직이지 않으면 체력 깎임
-[완료] 모래바람 - 앞이 안보이게
-[완료] 바이러스 - 랜덤으로 감염되고 감염된 사람과 접촉하면 체력 깎임
-[완료] 산성비 - 비를 맞으면 체력 깎임
-[완료] 우박 - 하늘에서 우박이 떨어지고 맞으면 체력 깎임
-토네이도 - 토네이도에 닿으면 날라감
-번개 - 맞으면 즉사
-
-]]
-
-
-
 --// Services //--
 local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
