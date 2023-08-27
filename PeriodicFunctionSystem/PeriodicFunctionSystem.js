@@ -246,9 +246,13 @@ end
 
 local function OnPlayerAdded(player: Player)
 
+	print('test01')
 	local vInShelter = Instance.new('BoolValue')
+	print('test02')
 	vInShelter.Parent = player
+	print('test03')
 	vInShelter.Name = 'InShelter'
+	print('test04')
 	vInShelter:GetPropertyChangedSignal('Value'):Connect(function()
 		pcall(function()
 			if vInShelter.Value then
@@ -266,6 +270,7 @@ local function OnPlayerAdded(player: Player)
 			end
 		end)
 	end)
+	print('test05')
 
 	local vNoDamage = Instance.new('BoolValue')
 	vNoDamage.Parent = player
