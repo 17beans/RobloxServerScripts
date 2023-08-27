@@ -111,6 +111,9 @@ function module.Execute()
 				local vInShelter: BoolValue = player:FindFirstChild('InShelter')
 				if not vInShelter then warn('[Hail] Player does not have InShelter BoolValue') continue end
 				if vInShelter.Value then continue end
+				local vNoDamage: BoolValue = player:FindFirstChild('NoDamage')
+				if not vNoDamage then warn('[Hail] Player does not have NoDamage BoolValue') continue end
+				if vNoDamage.Value then continue end
 				local Humanoid = character:FindFirstChildOfClass('Humanoid')
 				if not Humanoid then continue end
 
