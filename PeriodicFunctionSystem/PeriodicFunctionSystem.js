@@ -2,19 +2,34 @@ export const LuaCodePeriodicFunctinSystem = `
 
 
 
-print('test01')
+--[[
+ Script by bean7189
+ 이 스크립트 전체 내용은 bean7189에 의해서만 작성되었으며, bean7189 이외에 다른 사람에 의해 참고, 이용 등 유출될 수 없습니다.
+
+
+[완료] 지진 - 파트 흔들리게
+[완료] 대설 - 모든 파트가 미끄러워짐
+[완료] 눈보라 - 움직이지 않으면 체력 깎임
+[완료] 모래바람 - 앞이 안보이게
+[완료] 바이러스 - 랜덤으로 감염되고 감염된 사람과 접촉하면 체력 깎임
+[완료] 산성비 - 비를 맞으면 체력 깎임
+[완료] 우박 - 하늘에서 우박이 떨어지고 맞으면 체력 깎임
+토네이도 - 토네이도에 닿으면 날라감
+번개 - 맞으면 즉사
+
+]]
+
+
+
 --// Services //--
 local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Debris = game:GetService('Debris')
 ----
-print('test02')
 
 
 
 --// Presetup //--
-Players.PlayerAdded:Connect(OnPlayerAdded)
-
 local FolderAutoSetup = script:FindFirstChild('AutoSetup')
 if FolderAutoSetup then
 	for _, Service in pairs(FolderAutoSetup:GetChildren()) do
@@ -43,7 +58,6 @@ if FolderAutoSetup then
 	end
 end
 ----
-print('test03')
 
 
 
@@ -67,7 +81,6 @@ local PERIODIC_FUNCTION_ALERT_TIME = config.PeriodicFunctionAlertTime.Value
 local fShelters = workspace.PeriodicFunctionSystem.Shelters
 
 ----
-print('test04')
 
 
 
@@ -77,7 +90,6 @@ local REvtShowPictogram = ReplicatedStorage.PeriodicFunctionSystem.Remotes.ShowP
 local BEvtPausePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.PausePeriodicFunction
 local BEvtResumePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.ResumePeriodicFunction
 ----
-print('test05')
 
 
 
@@ -89,12 +101,13 @@ local Common = require(script.Common)
 
 
 --// Variables //--
+local playerAddedPassed = {}
+
 local periodicFunctionFolders = {}
 local periodicFunctionModules = {}
 local coroutines = {}
 local currentModule: { ['Execute']: ()->(), ['Cancel']: ()->() }
 ----
-print('test07')
 
 
 
@@ -231,18 +244,15 @@ local function InitializeSafeZones()
 	end
 
 end
-print('test08')
 
 
-function OnPlayerAdded(player: Player)
+local function OnPlayerAdded(player: Player)
 
-	print('test01')
+	table.insert(playerAddedPassed, player)
+	
 	local vInShelter = Instance.new('BoolValue')
-	print('test02')
 	vInShelter.Parent = player
-	print('test03')
 	vInShelter.Name = 'InShelter'
-	print('test04')
 	vInShelter:GetPropertyChangedSignal('Value'):Connect(function()
 		pcall(function()
 			if vInShelter.Value then
@@ -260,7 +270,6 @@ function OnPlayerAdded(player: Player)
 			end
 		end)
 	end)
-	print('test05')
 
 	local vNoDamage = Instance.new('BoolValue')
 	vNoDamage.Parent = player
@@ -284,8 +293,19 @@ function OnPlayerAdded(player: Player)
 	end)
 
 end
+
+
+-- PlayerAdded 이벤트가 발생하기 전 이미 접속 완료된 플레이어가 존재할 경우에 대한 예외 처리 함수
+local function CheckPlayerAddedPassedPlayer()
+	for _, player in Players:GetPlayers() do
+		local passed = table.find(playerAddedPassed, player)
+		if passed then continue end
+
+		table.insert(playerAddedPassed, player)
+		OnPlayerAdded(player)
+	end
+end
 ----
-print('test09')
 
 
 
@@ -293,13 +313,12 @@ print('test09')
 InitializePeriodicFunctions()
 InitializeSafeZones()
 ----
-print('test10')
 
 
 
---// Main //--
+--// Main //
+Players.PlayerAdded:Connect(OnPlayerAdded)
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
-----
-print('test11')`
+----`
