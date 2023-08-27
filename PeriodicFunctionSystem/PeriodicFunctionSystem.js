@@ -11,9 +11,9 @@ export const LuaCodePeriodicFunctinSystem = `
 [완료] 대설 - 모든 파트가 미끄러워짐
 [완료] 눈보라 - 움직이지 않으면 체력 깎임
 [완료] 모래바람 - 앞이 안보이게
-바이러스 - 랜덤으로 감염되고 감염된 사람과 접촉하면 체력 깎임
-산성비 - 비를 맞으면 체력 깎임
-우박 - 하늘에서 우박이 떨어지고 맞으면 체력 깎임
+[완료] 바이러스 - 랜덤으로 감염되고 감염된 사람과 접촉하면 체력 깎임
+[완료] 산성비 - 비를 맞으면 체력 깎임
+[완료] 우박 - 하늘에서 우박이 떨어지고 맞으면 체력 깎임
 번개 - 맞으면 즉사
 토네이도 - 토네이도에 닿으면 날라감
 
@@ -24,7 +24,6 @@ export const LuaCodePeriodicFunctinSystem = `
 --// Services //--
 local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
-local ServerStorage = game:GetService('ServerStorage')
 local Debris = game:GetService('Debris')
 ----
 
@@ -70,8 +69,7 @@ end
 
 --// Constants //--
 local fPeriodicFunctionSystemReplicated = ReplicatedStorage.PeriodicFunctionSystem
-local fPeriodicFunctionSystemStorage = ServerStorage.PeriodicFunctionSystem
-local fPeriodicFunctions = fPeriodicFunctionSystemStorage.PeriodicFunctions
+local fPeriodicFunctions = script.PeriodicFunctions
 local LocalizationSystemReplicated = ReplicatedStorage:WaitForChild('LocalizationSystem', 5)
 
 local config = fPeriodicFunctionSystemReplicated.Config
@@ -79,12 +77,16 @@ local config = fPeriodicFunctionSystemReplicated.Config
 local PERIODIC_FUNCTION_INTERVAL_MIN = config.PeriodicFunctionIntervalMin.Value
 local PERIODIC_FUNCTION_INTERVAL_MAX = config.PeriodicFunctionIntervalMax.Value
 local PERIODIC_FUNCTION_ALERT_TIME = config.PeriodicFunctionAlertTime.Value
+
+local fShelters = workspace.PeriodicFunctionSystem.Shelters
+
 ----
 
 
 
 --// Remotes / Bindables //--
 local REvtAlertPeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Remotes.AlertPeriodicFunction
+local REvtShowPictogram = ReplicatedStorage.PeriodicFunctionSystem.Remotes.ShowPictogram
 local BEvtPausePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.PausePeriodicFunction
 local BEvtResumePeriodicFunction = ReplicatedStorage.PeriodicFunctionSystem.Bindables.ResumePeriodicFunction
 ----
@@ -140,6 +142,7 @@ local function ServicePeriodicFunction()
 		task.wait(6)
 
 		-- Alert Periodic Function
+		REvtShowPictogram:FireAllClients(config.Icon.Image)
 		local TimeLeft = PERIODIC_FUNCTION_ALERT_TIME
 		while TimeLeft >= 0 do
 			local PeriodicFunctionInfo: { Title: {string}, Description: {string}, FunctionName: {string} }
@@ -194,17 +197,77 @@ end
 local function OnBindableResumePeriodicFunction()
 	RunServicePeriodicFunctionService()
 end
+
+
+local function InitializeSafeZones()
+	for _, Shelter: BasePart in fShelters:GetChildren() do
+
+		local TouchedDebounce = false
+		Shelter.Touched:Connect(function(coll: BasePart)
+			if TouchedDebounce then return end
+			local character = coll.Parent
+			if not character then return end
+			local player = Players:GetPlayerFromCharacter(character)
+			if not player then return end
+			local Humanoid = character:FindFirstChildOfClass('Humanoid')
+			if not Humanoid then return end
+			if not (Humanoid.Health > 0) then return end
+			local vInShelter: BoolValue = player:FindFirstChild('InShelter')
+			if vInShelter.Value then return end
+
+
+			TouchedDebounce = true
+			vInShelter.Value = true
+			TouchedDebounce = false
+		end)
+
+		local TouchEndedDebounce = false
+		Shelter.TouchEnded:Connect(function(coll: BasePart)
+			if TouchEndedDebounce then return end
+			local character = coll.Parent
+			if not character then return end
+			local player = Players:GetPlayerFromCharacter(character)
+			if not player then return end
+			local Humanoid = character:FindFirstChildOfClass('Humanoid')
+			if not Humanoid then return end
+			if not (Humanoid.Health > 0) then return end
+			local vInShelter: BoolValue = player:FindFirstChild('InShelter')
+			if not vInShelter.Value then return end
+
+
+			TouchEndedDebounce = true
+			vInShelter.Value = false
+			TouchEndedDebounce = false
+		end)
+	end
+
+end
+
+
+local function OnPlayerAdded(player: Player)
+
+	local vInShelter = Instance.new('BoolValue')
+	vInShelter.Parent = player
+	vInShelter.Name = 'InShelter'
+
+	local vNoDamage = Instance.new('BoolValue')
+	vNoDamage.Parent = player
+	vNoDamage.Name = 'NoDamage'
+
+end
 ----
 
 
 
 --// Setup //--
 InitializePeriodicFunctions()
+InitializeSafeZones()
 ----
 
 
 
 --// Main //
+Players.PlayerAdded:Connect(OnPlayerAdded)
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
