@@ -1,8 +1,10 @@
 export const gameIDs = JSON.stringify(
     [
-        // LoadStringTest Place
+        // LoadStringTest Experience
         5015192769,
-        // Crong Studio Disaster Tower
+        // PeriodicFunctionSystem Experience
+        4871036727,
+        // Crong Studio Disaster Tower Experience
         4992847527,
     ]
 );
