@@ -321,4 +321,5 @@ Players.PlayerAdded:Connect(OnPlayerAdded)
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
+CheckPlayerAddedPassedPlayer()
 ----`
