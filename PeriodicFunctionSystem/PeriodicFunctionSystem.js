@@ -140,8 +140,7 @@ local function ServicePeriodicFunction()
 		local config = currentPeriodicFunctionFolder.Config
 
 		--print('currentPeriodicFunctionName: ', currentPeriodicFunctionFolder.Name)
-		--task.wait(currentInterval)
-		task.wait(6)
+		task.wait(currentInterval)
 
 		-- Alert Periodic Function
 		REvtShowPictogram:FireAllClients(config.Icon.Image)
@@ -315,7 +314,7 @@ InitializeSafeZones()
 ----
 
 
-	
+
 --// Main //
 Players.PlayerAdded:Connect(OnPlayerAdded)
 RunServicePeriodicFunctionService()
