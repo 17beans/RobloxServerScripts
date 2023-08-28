@@ -14,6 +14,7 @@ local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local RunService = game:GetService('RunService')
 local Players = game:GetService('Players')
 ----
+print('test01')
 
 
 
@@ -46,6 +47,7 @@ if FolderAutoSetup then
 	end
 end
 ----
+print('test02')
 
 
 
@@ -60,6 +62,7 @@ local LocaleIDs = {
 	['en-us'] = 'en-us',
 }
 ----
+print('test03')
 
 
 
@@ -72,13 +75,14 @@ local DefaultLocaleID = LocaleIDs["ko-kr"]
 
 local IsStudio = RunService:IsStudio()
 ----
+print('test04')
 
 
 
 --// Remotes //--
 local REvtSendLocaleID = fLocalizationSystemReplicated.SendLocaleID
-
 ----
+print('test05')
 
 
 
@@ -92,6 +96,7 @@ local REvtSendLocaleID = fLocalizationSystemReplicated.SendLocaleID
 local playerAddedPassed = {}
 local SupportLocaleIDs = {}
 ----
+print('test06')
 
 
 
@@ -138,6 +143,7 @@ local function OnReceiveLocaleIDFromClient(player: Player, LocaleID: TypeLocaleI
 	end
 end
 ----
+print('test07')
 
 
 
@@ -146,6 +152,7 @@ for _, LocaleID: BoolValue in pairs(config.SupportLocaleIDs:GetChildren()) do
 	table.insert(SupportLocaleIDs, LocaleID.Name)
 end
 ----
+print('test08')
 
 
 
@@ -153,4 +160,5 @@ end
 REvtSendLocaleID.OnServerEvent:Connect(OnReceiveLocaleIDFromClient)
 Players.PlayerAdded:Connect(OnPlayerAdded)
 CheckPlayerAddedPassedPlayer()
-----`
+----
+print('test09')`
