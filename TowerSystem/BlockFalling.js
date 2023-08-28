@@ -50,7 +50,6 @@ local function OnFallingBlockTouch(block: BasePart)
 		if debounce then return end
 		local character = coll.Parent
 		if not character then return end
-		print('character: ', character)
 		local player = Players:GetPlayerFromCharacter(character)
 		if not player then return end
 		local Humanoid = character:FindFirstChildOfClass('Humanoid')

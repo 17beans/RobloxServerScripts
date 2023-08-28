@@ -22,7 +22,7 @@ local function OnDamageBlockTouch(coll: BasePart, nameTable: {})
 
     -- 기본 데미지 10
     local amount = 10
-    if nameTable[2] then amount = tonumber(nameTable[2]) end
+    if nameTable[3] and tonumber(nameTable[3]) then amount = tonumber(nameTable[3]) end
 
     -- 데미지 주기
     Humanoid:TakeDamage(amount)
