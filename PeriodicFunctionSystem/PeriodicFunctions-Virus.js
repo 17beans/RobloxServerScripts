@@ -37,6 +37,8 @@ type TypeInfo = {
 
 
 --// Constants //--
+local vCurrentPeriodicFunctionName: StringValue = workspace.PeriodicFunctionSystem.CurrentPeriodicFunctionName
+
 local fPeriodicFunctionSystemServer = ServerScriptService.PeriodicFunctionSystem
 
 local Config = script.Parent.Config
@@ -145,6 +147,7 @@ function module.Execute()
 	task.spawn(function()
 		targetRunTime = math.random(RUN_TIME_MIN, RUN_TIME_MAX)
 		RunTimer()
+		vCurrentPeriodicFunctionName.Value = script.Parent.Name
 
 		local players = Players:GetPlayers()
 		local selectedPlayers = Common.GetCertainPlayers(players, Common.GetAmountWithProbability(#players, PROBABILITY))
@@ -211,6 +214,7 @@ function module.Execute()
 
 			if currentRunTime >= targetRunTime then
 				StopTimer()
+				vCurrentPeriodicFunctionName.Value = ''
 
 				for _, player: Player in pairs(Players:GetPlayers()) do
 					if not playerTouchedConnections[player.UserId] then continue end

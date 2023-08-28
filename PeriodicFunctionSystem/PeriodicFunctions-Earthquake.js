@@ -34,6 +34,8 @@ type TypeBlockList = {
 
 
 --// Constants //--
+local vCurrentPeriodicFunctionName: StringValue = workspace.PeriodicFunctionSystem.CurrentPeriodicFunctionName
+
 local Config = script.Parent.Config
 local RUN_TIME_MIN = Config.RunTimeMin.Value
 local RUN_TIME_MAX = Config.RunTimeMax.Value
@@ -95,6 +97,7 @@ end
 local function RunEarthquake()
 	targetRunTime = math.random(RUN_TIME_MIN, RUN_TIME_MAX)
 	RunTimer()
+	vCurrentPeriodicFunctionName.Value = script.Parent.Name
 
 
 	if USE_PRISMATIC_CONSTRAINT then
@@ -169,6 +172,7 @@ local function RunEarthquake()
 
 			if currentRunTime >= targetRunTime then
 				StopTimer()
+				vCurrentPeriodicFunctionName.Value = ''
 				for _, BlockInfo: TypeBlockList in pairs(blockList) do
 					BlockInfo.VisibleBlock.CFrame = BlockInfo.Block.CFrame
 					BlockInfo.VisibleBlock.Anchored = true

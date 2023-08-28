@@ -101,6 +101,7 @@ local Common = require(script.Common)
 
 
 --// Variables //--
+local PeriodicFunctionRunning = false
 local playerAddedPassed = {}
 
 local periodicFunctionFolders = {}
@@ -169,6 +170,7 @@ end
 local function RunServicePeriodicFunctionService()
 	coroutines['ServicePeriodicFunction'] = coroutine.create(ServicePeriodicFunction)
 	coroutine.resume(coroutines.ServicePeriodicFunction)
+	PeriodicFunctionRunning = true
 end
 
 
@@ -185,7 +187,11 @@ end
 
 
 local function OnBindablePausePeriodicFunction()
+	if not PeriodicFunctionRunning then return end
+
+
 	StopServicePeriodicFunctionService()
+	PeriodicFunctionRunning = false
 
 	local Title = Localization.AlertInfo.Stop.Title
 	local Description = Localization.AlertInfo.Stop.Description
@@ -196,7 +202,11 @@ local function OnBindablePausePeriodicFunction()
 end
 
 local function OnBindableResumePeriodicFunction()
+	if PeriodicFunctionRunning then return end
+
+
 	RunServicePeriodicFunctionService()
+	PeriodicFunctionRunning = true
 end
 
 
