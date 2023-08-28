@@ -14,7 +14,7 @@ const allGameIDs = JSON.parse(gameIDs);
 
 
 
-export const PeriodicFunctionSystem = (req, res) => {
+export const TowerSystem = (req, res) => {
     const scriptName = req.params.ScriptName
     if (!scriptName) {
         return res.json({
