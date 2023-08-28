@@ -89,41 +89,36 @@ local REvtSendLocaleID = fLocalizationSystemReplicated.SendLocaleID
 
 
 --// Variables //--
+local playerAddedPassed = {}
 local SupportLocaleIDs = {}
 ----
 
 
 
 --// Functions //--
-
-----
-
-
-
---// Setup //--
-for _, LocaleID: BoolValue in pairs(config.SupportLocaleIDs:GetChildren()) do
-	table.insert(SupportLocaleIDs, LocaleID.Name)
-end
-----
-
-
-
---// Main //
-
-
-Players.PlayerAdded:Connect(function(player)
-
+local function OnPlayerAdded(player: Player)
+	table.insert(playerAddedPassed, player)
+	
 	local fLocalizationSystem = Instance.new('Folder')
 	fLocalizationSystem.Parent = player
 	fLocalizationSystem.Name = 'LocalizationSystem'
+end
 
-end)
+-- PlayerAdded 이벤트가 발생하기 전 이미 접속 완료된 플레이어가 존재할 경우에 대한 예외 처리 함수
+local function CheckPlayerAddedPassedPlayer()
+	for _, player in Players:GetPlayers() do
+		local passed = table.find(playerAddedPassed, player)
+		if passed then continue end
+
+		table.insert(playerAddedPassed, player)
+		OnPlayerAdded(player)
+	end
+end
 
 
-REvtSendLocaleID.OnServerEvent:Connect(function(player: Player, LocaleID: TypeLocaleID)
-	
+local function OnReceiveLocaleIDFromClient(player: Player, LocaleID: TypeLocaleID)
 	local fLocalizationSystem: Folder = player.LocalizationSystem
-	
+
 	local vLocaleID = Instance.new('StringValue')
 	vLocaleID.Parent = fLocalizationSystem
 	vLocaleID.Name = 'LocaleID'
@@ -140,7 +135,21 @@ REvtSendLocaleID.OnServerEvent:Connect(function(player: Player, LocaleID: TypeLo
 		vLocaleID.Value = 
 			table.find(SupportLocaleIDs, LocaleID) and LocaleID or DefaultLocaleID
 	end
-end)
+end
+----
 
 
+
+--// Setup //--
+for _, LocaleID: BoolValue in pairs(config.SupportLocaleIDs:GetChildren()) do
+	table.insert(SupportLocaleIDs, LocaleID.Name)
+end
+----
+
+
+
+--// Main //
+REvtSendLocaleID.OnServerEvent:Connect(OnReceiveLocaleIDFromClient)
+Players.PlayerAdded:Connect(OnPlayerAdded)
+CheckPlayerAddedPassedPlayer()
 ----`
