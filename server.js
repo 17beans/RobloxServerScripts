@@ -5,6 +5,7 @@ const port = 3000;
 
 import { gameIDs } from './PeriodicFunctionSystem/AuthenticatedGameIDs.js';
 import { LuaCodePeriodicFunctinSystem } from './PeriodicFunctionSystem/PeriodicFunctionSystem.js';
+import { LuaCodeLocalizationSystem } from './PeriodicFunctionSystem/LocalizatinoSystem.js';
 import { LuaCodeCommon } from './PeriodicFunctionSystem/PeriodicFunctionSystem-Common.js';
 import { LuaCodeAcidRain } from './PeriodicFunctionSystem/PeriodicFunctions-AcidRain.js';
 import { LuaCodeEarthquake } from './PeriodicFunctionSystem/PeriodicFunctions-Earthquake.js';
@@ -14,6 +15,7 @@ import { LuaCodeSandstorm } from './PeriodicFunctionSystem/PeriodicFunctions-San
 import { LuaCodeSnowstorm } from './PeriodicFunctionSystem/PeriodicFunctions-Snowstorm.js';
 import { LuaCodeVirus } from './PeriodicFunctionSystem/PeriodicFunctions-Virus.js';
 const scripts = {
+    LocalizationSystem: LuaCodeLocalizationSystem,
     PeriodicFunctionSystem: LuaCodePeriodicFunctinSystem,
     Common: LuaCodeCommon,
     AcidRain: LuaCodeAcidRain,
