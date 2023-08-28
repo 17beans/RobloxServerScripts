@@ -117,6 +117,7 @@ end
 
 
 local function OnReceiveLocaleIDFromClient(player: Player, LocaleID: TypeLocaleID)
+	print('OnReceiveLocaleIDFromClient function was called. LocaleID: ', LocaleID)
 	local fLocalizationSystem: Folder = player.LocalizationSystem
 
 	local vLocaleID = Instance.new('StringValue')
