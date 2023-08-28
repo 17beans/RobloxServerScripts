@@ -47,24 +47,15 @@ local function OnFallingBlockTouch(block: BasePart)
 	local connection = TouchedConnections
 	local debounce = false
 	connection = block.Touched:Connect(function(coll)
-		print('test01')
 		if debounce then return end
-		print('test02')
 		local character = coll.Parent
-		print('test03')
 		if not character then return end
 		print('character: ', character)
-		print('test04')
 		local player = Players:GetPlayerFromCharacter(character)
-		print('test05')
 		if not player then return end
-		print('test06')
 		local Humanoid = character:FindFirstChildOfClass('Humanoid')
-		print('test07')
 		if not Humanoid then return end
-		print('test08')
 		if not (Humanoid.Health > 0) then return end
-		print('test09')
 
 
 		debounce = true
@@ -81,7 +72,6 @@ local function OnFallingBlockTouch(block: BasePart)
 		Debris:AddItem(Cloned_block, respawnTime)
 		task.wait(respawnTime)
 		block.Parent = previousBlockParent
-		print('test10')
 
 		debounce = false
 	end)
