@@ -1,11 +1,14 @@
 import { gameIDs } from '../TowerSystem/AuthenticatedGameIDs.js';
 import { LuaCodeBlockDamage } from '../TowerSystem/BlockDamage.js';
-import { LuaCodeTowerSystem } from '../TowerSystem/';
+import { LuaCodeBlockKill } from '../TowerSystem/BlockKill.js';
+import { LuaCodeBlockFalling } from '../TowerSystem/BlockFalling.js';
 
 
 
 const scripts = {
     BlockDamage: LuaCodeBlockDamage,
+    BlockKill: LuaCodeBlockKill,
+    BlockFalling: LuaCodeBlockFalling,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
