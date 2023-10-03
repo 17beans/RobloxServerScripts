@@ -34,6 +34,8 @@ type TypeCharacterInfo = {
 
 
 --// Constants //--
+local vCurrentPeriodicFunctionName: StringValue = workspace.PeriodicFunctionSystem.CurrentPeriodicFunctionName
+
 local Config = script.Parent.Config
 local RUN_TIME_MIN = Config.RunTimeMin.Value
 local RUN_TIME_MAX = Config.RunTimeMax.Value
@@ -46,14 +48,14 @@ local ATMOSPHERE_DENSITY = Config.AtmosphereDensity.Value
 local ATMOSPHERE_OFFSET = Config.AtmosphereOffset.Value
 local USE_TWEEN_SERVICE = Config.UseTweenService.Value
 
-	local fPeriodicFunctionSystemReplicated = ReplicatedStorage.PeriodicFunctionSystem
-	local fPeriodicFunctionSystemRemotes = fPeriodicFunctionSystemReplicated.Remotes
+local fPeriodicFunctionSystemReplicated = ReplicatedStorage.PeriodicFunctionSystem
+local fPeriodicFunctionSystemRemotes = fPeriodicFunctionSystemReplicated.Remotes
 ----
 
 
 
-	--// Remotes / Bindables //--
-	local REvtParticleEffect = fPeriodicFunctionSystemRemotes.ParticleEffect
+--// Remotes / Bindables //--
+local REvtParticleEffect = fPeriodicFunctionSystemRemotes.ParticleEffect
 ----
 
 
@@ -170,6 +172,7 @@ function module.Execute()
 	task.spawn(function()
 		targetRunTime = math.random(RUN_TIME_MIN, RUN_TIME_MAX)
 		RunTimer()
+		vCurrentPeriodicFunctionName.Value = script.Parent.Name
 		if not USE_TWEEN_SERVICE then
 			Lighting.Atmosphere.Density = ATMOSPHERE_DENSITY
 			Lighting.Atmosphere.Offset = ATMOSPHERE_OFFSET
@@ -191,6 +194,7 @@ function module.Execute()
 
 			if currentRunTime >= targetRunTime then
 				StopTimer()
+				vCurrentPeriodicFunctionName.Value = ''
 				if not USE_TWEEN_SERVICE then
 					Lighting.Atmosphere.Density = PrevAtmosphere.Density
 					Lighting.Atmosphere.Offset = PrevAtmosphere.Offset

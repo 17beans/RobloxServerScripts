@@ -101,6 +101,7 @@ local Common = require(script.Common)
 
 
 --// Variables //--
+local PeriodicFunctionRunning = false
 local playerAddedPassed = {}
 
 local periodicFunctionFolders = {}
@@ -169,6 +170,7 @@ end
 local function RunServicePeriodicFunctionService()
 	coroutines['ServicePeriodicFunction'] = coroutine.create(ServicePeriodicFunction)
 	coroutine.resume(coroutines.ServicePeriodicFunction)
+	PeriodicFunctionRunning = true
 end
 
 
@@ -185,7 +187,11 @@ end
 
 
 local function OnBindablePausePeriodicFunction()
+	if not PeriodicFunctionRunning then return end
+
+
 	StopServicePeriodicFunctionService()
+	PeriodicFunctionRunning = false
 
 	local Title = Localization.AlertInfo.Stop.Title
 	local Description = Localization.AlertInfo.Stop.Description
@@ -196,7 +202,11 @@ local function OnBindablePausePeriodicFunction()
 end
 
 local function OnBindableResumePeriodicFunction()
+	if PeriodicFunctionRunning then return end
+
+
 	RunServicePeriodicFunctionService()
+	PeriodicFunctionRunning = true
 end
 
 
@@ -293,7 +303,6 @@ local function OnPlayerAdded(player: Player)
 
 end
 
-
 -- PlayerAdded 이벤트가 발생하기 전 이미 접속 완료된 플레이어가 존재할 경우에 대한 예외 처리 함수
 local function CheckPlayerAddedPassedPlayer()
 	for _, player in Players:GetPlayers() do
@@ -302,6 +311,14 @@ local function CheckPlayerAddedPassedPlayer()
 
 		table.insert(playerAddedPassed, player)
 		OnPlayerAdded(player)
+	end
+end
+
+
+local function OnPlayerRemoving(player: Player)
+	local Found = table.find(playerAddedPassed, player)
+	if Found then
+		table.remove(playerAddedPassed, Found)
 	end
 end
 ----
@@ -317,6 +334,7 @@ InitializeSafeZones()
 
 --// Main //
 Players.PlayerAdded:Connect(OnPlayerAdded)
+Players.PlayerRemoving:Connect(OnPlayerRemoving)
 RunServicePeriodicFunctionService()
 BEvtPausePeriodicFunction.Event:Connect(OnBindablePausePeriodicFunction)
 BEvtResumePeriodicFunction.Event:Connect(OnBindableResumePeriodicFunction)
