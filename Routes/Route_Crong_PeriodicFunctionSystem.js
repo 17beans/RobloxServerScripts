@@ -1,14 +1,14 @@
-import { gameIDs } from '../Crong-PeriodicFunctionSystem/AuthenticatedGameIDs.js';
-import { LuaCodePeriodicFunctinSystem } from '../Crong-PeriodicFunctionSystem/PeriodicFunctionSystem.js';
-import { LuaCodeLocalizationSystem } from '../Crong-PeriodicFunctionSystem/LocalizatinoSystem.js';
-import { LuaCodeCommon } from '../Crong-PeriodicFunctionSystem/PeriodicFunctionSystem-Common.js';
-import { LuaCodeAcidRain } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-AcidRain.js';
-import { LuaCodeEarthquake } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Earthquake.js';
-import { LuaCodeHail } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Hail.js';
-import { LuaCodeHeavySnow } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-HeavySnow.js';
-import { LuaCodeSandstorm } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Sandstorm.js';
-import { LuaCodeSnowstorm } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Snowstorm.js';
-import { LuaCodeVirus } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Virus.js';
+import { gameIDs } from '../Crong-NaturalDisasterTower/AuthenticatedGameIDs.js';
+import { LuaCodePeriodicFunctinSystem } from '../Crong-NaturalDisasterTower/PeriodicFunctionSystem.js';
+import { LuaCodeLocalizationSystem } from '../Crong-NaturalDisasterTower/LocalizatinoSystem.js';
+import { LuaCodeCommon } from '../Crong-NaturalDisasterTower/PeriodicFunctionSystem-Common.js';
+import { LuaCodeAcidRain } from '../Crong-NaturalDisasterTower/PeriodicFunctions-AcidRain.js';
+import { LuaCodeEarthquake } from '../Crong-NaturalDisasterTower/PeriodicFunctions-Earthquake.js';
+import { LuaCodeHail } from '../Crong-NaturalDisasterTower/PeriodicFunctions-Hail.js';
+import { LuaCodeHeavySnow } from '../Crong-NaturalDisasterTower/PeriodicFunctions-HeavySnow.js';
+import { LuaCodeSandstorm } from '../Crong-NaturalDisasterTower/PeriodicFunctions-Sandstorm.js';
+import { LuaCodeSnowstorm } from '../Crong-NaturalDisasterTower/PeriodicFunctions-Snowstorm.js';
+import { LuaCodeVirus } from '../Crong-NaturalDisasterTower/PeriodicFunctions-Virus.js';
 
 
 
