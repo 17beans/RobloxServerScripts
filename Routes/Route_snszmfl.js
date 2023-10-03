@@ -1,20 +1,25 @@
-import { gameIDs } from '../TowerSystem/AuthenticatedGameIDs.js';
-import { LuaCodeBlockDamage } from '../TowerSystem/BlockDamage.js';
-import { LuaCodeBlockKill } from '../TowerSystem/BlockKill.js';
-import { LuaCodeBlockFalling } from '../TowerSystem/BlockFalling.js';
+import { gameIDs } from '../snszmfl-SnowballFightTower/AuthenticatedGameIDs.js';
+import { LuaCodePeriodicFunctinSystem } from '../snszmfl-SnowballFightTower/PeriodicFunctionSystem.js';
+import { LuaCodeCommon } from '../snszmfl-SnowballFightTower/PeriodicFunctionSystem-Common.js';
+import { LuaCodeLocalizationSystem } from '../snszmfl-SnowballFightTower/LocalizatinoSystem.js';
+import { LuaCodeFreezeBlocks } from '../snszmfl-SnowballFightTower/PeriodicFunctions-FreezeBlocks.js';
 
 
 
 const scripts = {
-    BlockDamage: LuaCodeBlockDamage,
-    BlockKill: LuaCodeBlockKill,
-    BlockFalling: LuaCodeBlockFalling,
+    LocalizationSystem: LuaCodeLocalizationSystem,
+    PeriodicFunctionSystem: LuaCodePeriodicFunctinSystem,
+    Common: LuaCodeCommon,
+    FreezeBlocks: LuaCodeFreezeBlocks,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
+// console.log(`test code: `);
+// console.log(require('./Crong-PeriodicFunctionSystem/PeriodicFunctionSystem.lua'));
 
 
-export const TowerSystem = (req, res) => {
+
+export const Route_snszmfl_SnowballFightTower = (req, res) => {
     const scriptName = req.params.ScriptName
     if (!scriptName) {
         return res.json({

@@ -1,14 +1,14 @@
-import { gameIDs } from '../PeriodicFunctionSystem/AuthenticatedGameIDs.js';
-import { LuaCodeLocalizationSystem } from '../PeriodicFunctionSystem/LocalizatinoSystem.js';
-import { LuaCodePeriodicFunctinSystem } from '../PeriodicFunctionSystem/PeriodicFunctionSystem.js';
-import { LuaCodeCommon } from '../PeriodicFunctionSystem/PeriodicFunctionSystem-Common.js';
-import { LuaCodeAcidRain } from '../PeriodicFunctionSystem/PeriodicFunctions-AcidRain.js';
-import { LuaCodeEarthquake } from '../PeriodicFunctionSystem/PeriodicFunctions-Earthquake.js';
-import { LuaCodeHail } from '../PeriodicFunctionSystem/PeriodicFunctions-Hail.js';
-import { LuaCodeHeavySnow } from '../PeriodicFunctionSystem/PeriodicFunctions-HeavySnow.js';
-import { LuaCodeSandstorm } from '../PeriodicFunctionSystem/PeriodicFunctions-Sandstorm.js';
-import { LuaCodeSnowstorm } from '../PeriodicFunctionSystem/PeriodicFunctions-Snowstorm.js';
-import { LuaCodeVirus } from '../PeriodicFunctionSystem/PeriodicFunctions-Virus.js';
+import { gameIDs } from '../Crong-PeriodicFunctionSystem/AuthenticatedGameIDs.js';
+import { LuaCodePeriodicFunctinSystem } from '../Crong-PeriodicFunctionSystem/PeriodicFunctionSystem.js';
+import { LuaCodeLocalizationSystem } from '../Crong-PeriodicFunctionSystem/LocalizatinoSystem.js';
+import { LuaCodeCommon } from '../Crong-PeriodicFunctionSystem/PeriodicFunctionSystem-Common.js';
+import { LuaCodeAcidRain } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-AcidRain.js';
+import { LuaCodeEarthquake } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Earthquake.js';
+import { LuaCodeHail } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Hail.js';
+import { LuaCodeHeavySnow } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-HeavySnow.js';
+import { LuaCodeSandstorm } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Sandstorm.js';
+import { LuaCodeSnowstorm } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Snowstorm.js';
+import { LuaCodeVirus } from '../Crong-PeriodicFunctionSystem/PeriodicFunctions-Virus.js';
 
 
 
@@ -26,9 +26,12 @@ const scripts = {
 }
 const allGameIDs = JSON.parse(gameIDs);
 
+// console.log(`test code: `);
+// console.log(require('./Crong-PeriodicFunctionSystem/PeriodicFunctionSystem.lua'));
 
 
-export const PeriodicFunctionSystem = (req, res) => {
+
+export const Route_Crong_PeriodicFunctionSystem = (req, res) => {
     const scriptName = req.params.ScriptName
     if (!scriptName) {
         return res.json({
