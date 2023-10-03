@@ -1,7 +1,7 @@
 import { gameIDs } from '../snszmfl-SnowballFightTower/AuthenticatedGameIDs.js';
 import { LuaCodePeriodicFunctinSystem } from '../snszmfl-SnowballFightTower/PeriodicFunctionSystem.js';
 import { LuaCodeCommon } from '../snszmfl-SnowballFightTower/PeriodicFunctionSystem-Common.js';
-import { LuaCodeLocalizationSystem } from '../snszmfl-SnowballFightTower/LocalizatinoSystem.js';
+import { LuaCodeLocalizationSystem } from '../snszmfl-SnowballFightTower/LocalizationSystem.js';
 import { LuaCodeFreezeBlocks } from '../snszmfl-SnowballFightTower/PeriodicFunctions-FreezeBlocks.js';
 
 

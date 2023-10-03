@@ -1,7 +1,7 @@
-import { gameIDs } from '../TowerSystem/AuthenticatedGameIDs.js';
-import { LuaCodeBlockDamage } from '../TowerSystem/BlockDamage.js';
-import { LuaCodeBlockKill } from '../TowerSystem/BlockKill.js';
-import { LuaCodeBlockFalling } from '../TowerSystem/BlockFalling.js';
+import { gameIDs } from '../Crong-NaturalDisasterTower/AuthenticatedGameIDs.js';
+import { LuaCodeBlockDamage } from '../Crong-NaturalDisasterTower/BlockDamage.js';
+import { LuaCodeBlockKill } from '../Crong-NaturalDisasterTower/BlockKill.js';
+import { LuaCodeBlockFalling } from '../Crong-NaturalDisasterTower/BlockFalling.js';
 
 
 
