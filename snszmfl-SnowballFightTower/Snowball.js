@@ -141,8 +141,10 @@ local function OnTouched(coll: BasePart)
 		touchedConnection:Disconnect()
 		touchedConnection = nil
 	end
-	currentSnowball:Destroy()
-	currentSnowball = nil
+	if currentSnowball then
+		currentSnowball:Destroy()
+		currentSnowball = nil
+	end
 
 	FreezeCharacter(character, player)
 
