@@ -334,7 +334,7 @@ local function OnPlayerAdded(player: Player)
 			TextLabel.Text = string.format(message['en-us'], role['en-us'], player.Name)
 			local UIStroke = Instance.new('UIStroke')
 			UIStroke.Parent = TextLabel
-			UIStroke.Thickness = 2
+			UIStroke.Thickness = 4
 			UIStroke.Color = Color3.fromRGB(255, 255, 255)
 		end
 
