@@ -10,7 +10,7 @@ const scripts = {
     LocalizationSystem: LuaCodeLocalizationSystem,
     PeriodicFunctionSystem: LuaCodePeriodicFunctinSystem,
     FreezeBlocks: LuaCodeFreezeBlocks,
-    Snowball: LuaCodeSnowball,
+    SnowballScript: LuaCodeSnowball,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
