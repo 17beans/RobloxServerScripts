@@ -301,6 +301,105 @@ local function OnPlayerAdded(player: Player)
 		end)
 	end)
 
+
+
+	-- Show Developer
+	local function ShowDeveloper(player: Player)
+		player.CharacterAppearanceLoaded:Wait()
+
+		local function CreateBillboard(player: Player, role: {})
+			local message = {
+				['ko-kr'] = '%s 개발자 @%s',
+				['en-us'] = '%s Developer @%s',
+			}
+
+			local billboard = Instance.new('BillboardGui')
+			billboard.Parent =  player.Character.Head
+			billboard.Size = UDim2.new(0, 100, 0, 50)
+			billboard.StudsOffset = Vector3.new(0, 3, 0)
+			local Frame = Instance.new('Frame')
+			Frame.Parent = billboard
+			Frame.Size = UDim2.new(1, 0, 1, 0)
+			Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+			Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+			Frame.BackgroundTransparency = 1
+			local TextLabel = Instance.new('TextLabel')
+			TextLabel.Parent = Frame
+			TextLabel.Size = UDim2.new(1, -10, 1, -10)
+			TextLabel.BackgroundTransparency = 1
+			TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+			TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+			TextLabel.TextScaled = true
+			TextLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+			TextLabel.Text = string.format(message['en-us'], role['en-us'], player.Name)
+			local UIStroke = Instance.new('UIStroke')
+			UIStroke.Parent = TextLabel
+			UIStroke.Thickness = 2
+			UIStroke.Color = Color3.fromRGB(255, 255, 255)
+		end
+
+		local messages = {
+			['ko-kr'] = '[System] %s 개발자 %s님이 입장하셨습니다',
+			['en-us'] = '[System] %s Developer %s join the game',
+		}
+		local developers = {
+			['bean7189'] = {
+				['role'] = {
+					['ko-kr'] = '스크립터',
+					['en-us'] = 'Scripter',
+				}
+			},
+			['Hyunyi01_26good'] = {
+				['role'] = {
+					['ko-kr'] = '빌더',
+					['en-us'] = 'Builder',
+				}
+			},
+			['C_rongg'] = {
+				['role'] = {
+					['ko-kr'] = '기획자',
+					['en-us'] = 'GamePlanner',
+				}
+			},
+		}
+
+		if player.Name == 'bean7189' then
+			for _, otherPlayer: Player in game.Players:GetPlayers() do
+				local LocaleID = otherPlayer.LocaleId == 'ko-kr' and 'ko-kr' or 'en-us'
+
+				local Hint = Instance.new('Hint')
+				Hint.Parent = otherPlayer.PlayerGui
+				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
+				game.Debris:AddItem(Hint, 5)
+			end
+			CreateBillboard(player, developers[player.Name].role)
+
+		elseif player.Name == 'Hyunyi01_26good' then
+			for _, otherPlayer: Player in game.Players:GetPlayers() do
+				local LocaleID = otherPlayer.LocaleId == 'ko-kr' and 'ko-kr' or 'en-us'
+
+				local Hint = Instance.new('Hint')
+				Hint.Parent = otherPlayer.PlayerGui
+				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
+				game.Debris:AddItem(Hint, 5)
+			end
+			CreateBillboard(player, developers[player.Name].role)
+
+		elseif player.Name == 'C_rongg' then
+			for _, otherPlayer: Player in game.Players:GetPlayers() do
+				local LocaleID = otherPlayer.LocaleId == 'ko-kr' and 'ko-kr' or 'en-us'
+
+				local Hint = Instance.new('Hint')
+				Hint.Parent = otherPlayer.PlayerGui
+				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
+				game.Debris:AddItem(Hint, 5)
+			end
+			CreateBillboard(player, developers[player.Name].role)
+
+		end
+	end
+	ShowDeveloper(player)
+
 end
 
 -- PlayerAdded 이벤트가 발생하기 전 이미 접속 완료된 플레이어가 존재할 경우에 대한 예외 처리 함수

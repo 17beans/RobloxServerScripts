@@ -131,7 +131,7 @@ local function ServicePeriodicFunction()
 		task.wait(currentInterval)
 
 		-- Alert Periodic Function
-		REvtShowPictogram:FireAllClients(config.Icon.Image)
+		--REvtShowPictogram:FireAllClients(config.Icon.Image)
 		local TimeLeft = PERIODIC_FUNCTION_ALERT_TIME
 		while TimeLeft >= 0 do
 			local PeriodicFunctionInfo: { Title: {string}, Description: {string}, FunctionName: {string} }
@@ -166,7 +166,7 @@ local function StopServicePeriodicFunctionService()
 		currentModule = nil
 	end
 
-	--Common.AlertAllClient(Common.MessageType.Hint, Localization.AlertInfo.Stop.HintMessage)
+	Common.AlertAllClient(Common.MessageType.Hint, Localization.AlertInfo.Stop.HintMessage)
 
 	coroutine.close(coroutines['ServicePeriodicFunction'])
 end
