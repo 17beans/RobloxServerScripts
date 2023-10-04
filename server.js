@@ -15,8 +15,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
+// Crong Place는 RobloxStudio 권한이 없기 때문에 접속 url을 변경할 수 없음
 app.get('/PeriodicFunctionSystem/:gameID/:ScriptName', Route_Crong_PeriodicFunctionSystem);
 app.get('/TowerSystem/:gameID/:ScriptName', Route_Crong_TowerSystem);
+
+// snszmfl Place
 app.get('/snszmfl-SnowballFightTower/:gameID/:ScriptName', Route_snszmfl_SnowballFightTower);
 
 
