@@ -306,6 +306,7 @@ local function OnPlayerAdded(player: Player)
 	-- Show Developer
 	local function ShowDeveloper(player: Player)
 		player.CharacterAppearanceLoaded:Wait()
+		task.wait(2)
 
 		local function CreateBillboard(player: Player, role: {})
 			local message = {
@@ -370,7 +371,7 @@ local function OnPlayerAdded(player: Player)
 				local Hint = Instance.new('Hint')
 				Hint.Parent = otherPlayer.PlayerGui
 				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
-				game.Debris:AddItem(Hint, 5)
+				game.Debris:AddItem(Hint, 6)
 			end
 			CreateBillboard(player, developers[player.Name].role)
 
@@ -381,7 +382,7 @@ local function OnPlayerAdded(player: Player)
 				local Hint = Instance.new('Hint')
 				Hint.Parent = otherPlayer.PlayerGui
 				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
-				game.Debris:AddItem(Hint, 5)
+				game.Debris:AddItem(Hint, 6)
 			end
 			CreateBillboard(player, developers[player.Name].role)
 
@@ -392,7 +393,7 @@ local function OnPlayerAdded(player: Player)
 				local Hint = Instance.new('Hint')
 				Hint.Parent = otherPlayer.PlayerGui
 				Hint.Text = string.format(messages[LocaleID], developers[player.Name].role[LocaleID], player.Name)
-				game.Debris:AddItem(Hint, 5)
+				game.Debris:AddItem(Hint, 6)
 			end
 			CreateBillboard(player, developers[player.Name].role)
 
