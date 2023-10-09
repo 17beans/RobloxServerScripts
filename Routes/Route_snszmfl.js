@@ -4,6 +4,7 @@ import { LuaCodeLocalizationSystem } from '../snszmfl-SnowballFightTower/Localiz
 import { LuaCodeFreezeBlocks } from '../snszmfl-SnowballFightTower/PeriodicFunctions-FreezeBlocks.js';
 import { LuaCodeSnowball } from '../snszmfl-SnowballFightTower/Snowball.js';
 import { LuaCodeDataStoreSystem } from '../snszmfl-SnowballFightTower/DataStoreSystem.js';
+import { LuaCodeChatTagSystem } from '../snszmfl-SnowballFightTower/ChatTagSystem.js';
 
 
 
@@ -13,6 +14,7 @@ const scripts = {
     FreezeBlocks: LuaCodeFreezeBlocks,
     SnowballScript: LuaCodeSnowball,
     DataStoreSystem: LuaCodeDataStoreSystem,
+    ChatTagSystem: LuaCodeChatTagSystem,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
