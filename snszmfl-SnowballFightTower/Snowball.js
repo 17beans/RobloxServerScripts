@@ -12,6 +12,7 @@ export const LuaCodeSnowball = `
 --// Services //--
 local Debris = game:GetService('Debris')
 local Players = game:GetService('Players')
+local ReplicatedStorage = game:GetService('ReplicatedStorage')
 ----
 
 
@@ -34,6 +35,8 @@ local Handle = tool.Handle
 assert(Handle)
 local Snowball = tool.Snowball
 assert(Snowball)
+local GoldSparkles = Snowball.GoldSparkles
+assert(GoldSparkles)
 local sFreeze = script.Parent.Freeze
 local sHit = script.Parent.Hit
 
@@ -42,6 +45,10 @@ assert(Config)
 local COOLTIME_THROW = Config.CoolTime_Throw.Value
 local LIFETIME_SNOWBALL = Config.LifeTime_Snowball.Value
 local FREEZE_TIME = Config.FreezeTime.Value
+
+local LocalPlayer = script.Parent.Parent.Parent
+local fPlayerData = LocalPlayer:WaitForChild('PlayerData', 5)
+local vIsRewardedGoldSnowball: BoolValue = fPlayerData:WaitForChild('IsRewardedGoldSnowball', 5)
 ----
 
 
@@ -199,6 +206,20 @@ local function OnThrow(player: Player, mousePosition: Vector3)
 	BodyVelocity.P = 3000
 	BodyVelocity.Velocity = direction.Unit * 100
 end
+
+
+local function ChangeSnowballDesign()
+	if not vIsRewardedGoldSnowball.Value then return end
+
+	Snowball.Color = GoldSparkles.SparkleColor
+	GoldSparkles.Enabled = true
+	tool.Name = 'GoldSnowball'
+end
+
+local function SetupGoldSnowballRewarded()
+	vIsRewardedGoldSnowball:GetPropertyChangedSignal('Value')
+		:Connect(ChangeSnowballDesign)
+end
 ----
 
 
@@ -214,4 +235,6 @@ tool.Equipped:Connect(OnEquipped)
 tool.Activated:Connect(OnActivated)
 tool.Unequipped:Connect(OnUnequipped)
 REvtThrow.OnServerEvent:Connect(OnThrow)
+SetupGoldSnowballRewarded()
+ChangeSnowballDesign()
 ----`

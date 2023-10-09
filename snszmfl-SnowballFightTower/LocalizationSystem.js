@@ -146,7 +146,7 @@ local function OnReceiveLocaleIDFromClient(player: Player, LocaleID: TypeLocaleI
 
 	if IsStudio then
 		--print('[Server] 기본 LocaleID로 설정합니다: ', tostring(DefaultLocaleID))
-		vLocaleID.Value = DefaultLocaleID
+		vLocaleID.Value = config.StudioLocaleID.Value
 	else
 		vLocaleID.Value = 
 			table.find(SupportLocaleIDs, LocaleID) and LocaleID or DefaultLocaleID
