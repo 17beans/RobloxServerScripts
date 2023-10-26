@@ -192,6 +192,7 @@ local function OnThrow(player: Player, mousePosition: Vector3)
 	Trail.Attachment0 = AttachmentA
 	Trail.Attachment1 = AttachmentB
 	Trail.Color = ColorSequence.new(Color3.new(1, 1, 1))
+	Trail.Lifetime = 0.25
 	pcall(function() Debris:AddItem(currentSnowball, LIFETIME_SNOWBALL) end)
 	local connection: RBXScriptConnection
 	connection = currentSnowball.Destroying:Connect(function()
