@@ -129,6 +129,32 @@ end
 local function OnPlayerRemoving(player: Player)
 	playerAdded[player] = nil
 end
+
+
+local function CreateChatTagInfo(PlayerName: string, role_ko: string, role_en:string, color3: Color3, colorHex: string)
+	local fPlayer = Instance.new('Folder')
+	fPlayer.Parent = fDevelopers
+	fPlayer.Name = PlayerName
+	local fRole = Instance.new('Folder')
+	fRole.Parent = fPlayer
+	fRole.Name = 'Role'
+	local vKo_kr = Instance.new('StringValue')
+	vKo_kr.Parent = fRole
+	vKo_kr.Name = 'ko-kr'
+	vKo_kr.Value = role_ko
+	local vEn_us = Instance.new('StringValue')
+	vEn_us.Parent = fRole
+	vEn_us.Name = 'en-us'
+	vEn_us.Value = role_en
+	local vColor = Instance.new('Color3Value')
+	vColor.Parent = fPlayer
+	vColor.Name = 'Color'
+	vColor.Value = color3
+	local vColorHex = Instance.new('StringValue')
+	vColorHex.Parent = fPlayer
+	vColorHex.Name = 'ColorHex'
+	vColorHex.Value = colorHex
+end
 ----
 
 
@@ -141,6 +167,37 @@ if TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
 	LocalScript_ChatTagClient:Destroy()
 	LocalScript_ChatTagClient = nil
 end
+
+
+fDevelopers:ClearAllChildren()
+CreateChatTagInfo(
+	'bean7189',
+	'기획/스크립터',
+	'Producer/Scripter',
+	Color3.new(0.364706, 0.960784, 0.145098),
+	'#5df525'
+)
+CreateChatTagInfo(
+	'snszmfl',
+	'기획',
+	'Producer',
+	Color3.new(0.258824, 0.960784, 0.619608),
+	'#42f59e'
+)
+CreateChatTagInfo(
+	'SSHBOY7590',
+	'빌더',
+	'Builder',
+	Color3.new(0.258824, 0.960784, 0.517647),
+	'#f57779'
+)
+CreateChatTagInfo(
+	'1juan_hello',
+	'빌더',
+	'Builder',
+	Color3.new(0.960784, 0.466667, 0.47451),
+	'#42f584'
+)
 ----
 
 
