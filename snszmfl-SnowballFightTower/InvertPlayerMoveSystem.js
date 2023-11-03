@@ -43,20 +43,6 @@ if FolderAutoSetup then
 		end
 	end
 end
-
-
-local newPlayerModule = script.PlayerModule
-function SetupPlayerModule()
-	local PlayerModule: ModuleScript = StarterPlayer.StarterPlayerScripts:FindFirstChild('PlayerModule')
-	if PlayerModule then
-		PlayerModule:Destroy()
-		PlayerModule = nil
-	end
-
-	PlayerModule = newPlayerModule:Clone()
-	PlayerModule.Parent = StarterPlayer.StarterPlayerScripts
-end
-SetupPlayerModule()
 ----
 
 
