@@ -1,5 +1,5 @@
-import { gameIDs } from "../DaeSoon-ThrowCharacterSystem/AuthenticatedGameIDs";
-import { LuaCodeThrowCharacterSystem } from "../DaeSoon-ThrowCharacterSystem/ThrowCharacterSystem";
+import { gameIDs } from "../DaeSoon-ThrowCharacterSystem/AuthenticatedGameIDs.js";
+import { LuaCodeThrowCharacterSystem } from "../DaeSoon-ThrowCharacterSystem/ThrowCharacterSystem.js";
 
 
 
