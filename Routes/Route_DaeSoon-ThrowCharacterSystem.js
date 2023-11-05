@@ -13,7 +13,7 @@ const allGameIDs = JSON.parse(gameIDs);
 
 
 
-export const Route_snszmfl_SnowballFightTower = (req, res) => {
+export const Route_DaeSoon_ThrowCharacterSystem = (req, res) => {
     const scriptName = req.params.ScriptName
     if (!scriptName) {
         return res.json({

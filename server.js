@@ -8,6 +8,7 @@ const port = 3000;
 import { Route_Crong_PeriodicFunctionSystem } from './Routes/Route_Crong_PeriodicFunctionSystem.js'
 import { Route_Crong_TowerSystem } from './Routes/Route_Crong_TowerSystem.js'
 import { Route_snszmfl_SnowballFightTower } from './Routes/Route_snszmfl.js';
+import { Route_DaeSoon_ThrowCharacterSystem } from './Routes/Route_DaeSoon-ThrowCharacterSystem.js';
 
 
 
@@ -21,6 +22,9 @@ app.get('/TowerSystem/:gameID/:ScriptName', Route_Crong_TowerSystem);
 
 // snszmfl Place
 app.get('/snszmfl-SnowballFightTower/:gameID/:ScriptName', Route_snszmfl_SnowballFightTower);
+
+// DaeSoon Place
+app.get('/daesoon-ThrowCharacterSystem/:gameID/:ScriptName', Route_DaeSoon_ThrowCharacterSystem);
 
 
 
