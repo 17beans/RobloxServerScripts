@@ -1,4 +1,4 @@
-export const LuaCodeThrowCharacterSystem = `
+export const LuaCodeThrowCharacterSystem = `-- 캐릭터를 들고 있는 캐릭터는 다른 캐릭터에게 들리면 들고 있던 캐릭터를 놓쳐야 함
 
 
 
@@ -68,6 +68,7 @@ local CannotTouchEndedTime = 0.25
 
 --// Remotes / Bindables //--
 local RFncThrow: RemoteFunction = fRemotes['Throw']
+local REvtPut: RemoteEvent = fRemotes['Put']
 ----
 
 
@@ -245,10 +246,21 @@ local function CreateValueLastHoldCharacter(player: Player)
 	return vLastHoldCharacter
 end
 
+local function CreateValueIsHandlingByOther(character: Model)
+	assert(character, 'Invalid argument #1. character expected, got nil.')
+
+	local vIsHandlingByOther = Instance.new('BoolValue')
+	vIsHandlingByOther.Parent = character
+	vIsHandlingByOther.Name = 'IsHandlingByOther'
+
+	return vIsHandlingByOther
+end
+
 local function SetCollideCharacter(targetCharacter: Model, CanCollide: boolean)
 	for _, targetBasePart in targetCharacter:GetChildren() do
 		task.spawn(function()
 			if targetBasePart.Name == 'LiftDetectPart' then return end
+			if targetBasePart.Name == 'RayPart' then return end
 			if not targetBasePart:IsA('BasePart') then return end
 			targetBasePart.CanCollide = CanCollide
 			targetBasePart.Massless = not CanCollide
@@ -265,6 +277,10 @@ local function OnChangeValueHoldingCharacter(vHoldingCharacter: ObjectValue, vLa
 	if vHoldingCharacter.Value then
 		-- Last hold character 설정
 		vLastHoldCharacter.Value = vHoldingCharacter.Value
+
+		-- Value is handling by other 설정
+		local vIsHandlingByOther: BoolValue = targetCharacter['IsHandlingByOther']
+		vIsHandlingByOther.Value = true
 
 		-- Socket 생성
 		local HandPart: BasePart = RequestCharacter:FindFirstChild('RightHand') or RequestCharacter['Right Arm']
@@ -290,6 +306,10 @@ local function OnChangeValueHoldingCharacter(vHoldingCharacter: ObjectValue, vLa
 		socket:Destroy()
 		socket = nil
 		SetCollideCharacter(vLastHoldCharacter.Value, true)
+
+		-- Value is handling by other 설정
+		local vIsHandlingByOther: BoolValue = vLastHoldCharacter.Value['IsHandlingByOther']
+		vIsHandlingByOther.Value = false
 	end
 end
 
@@ -388,6 +408,8 @@ local function SetupNPC()
 		if player then continue end
 
 
+		CreateValueIsHandlingByOther(npc)
+
 		--;(function()
 		--	local LiftDetectPart = CreateLiftDetectPart(npc)
 
@@ -428,6 +450,9 @@ local function OnPlayerAdded(player: Player)
 	-- Setup raycast part
 	CreateRayPart(character, 4, 5)
 
+	-- Setup is handling by other BoolValue
+	CreateValueIsHandlingByOther(character)
+
 	-- Setup Value Last Hold Character
 	local vLastHoldCharacter = CreateValueLastHoldCharacter(player)
 
@@ -466,24 +491,37 @@ CheckPlayerAdded()
 
 
 RFncThrow.OnServerInvoke = function(RequestPlayer: Player, targetCharacter: Model, messageType: number)
-	print('messageType: ', messageType)
 	local RequestCharacter = RequestPlayer.Character
 
 	local fThrowCharacterSystemPlayer: Folder = GetThrowCharacterSystemFolder(RequestPlayer)
 	local vHoldingCharacter: ObjectValue = fThrowCharacterSystemPlayer: WaitForChild('HoldingCharacter', 5)
 
+	local targetPlayer = Players:GetPlayerFromCharacter(targetCharacter)
+	if targetPlayer then
+		local vThrowCharacterSystemTargetPlayer = targetPlayer['ThrowCharacterSystem']
+		local vTargetPlayerHoldingCharacter: ObjectValue = vThrowCharacterSystemTargetPlayer['HoldingCharacter']
+		vTargetPlayerHoldingCharacter.Value = nil
+
+		-- 놓치게 해야함
+		REvtPut:FireClient(targetPlayer)
+	end
+
 	if messageType == Settings.Enum.Lift and not vHoldingCharacter.Value then
+		local vIsHandlingByOther: BoolValue = targetCharacter['IsHandlingByOther']
+		if vIsHandlingByOther.Value then return end
+
 		local targetHumanoid = targetCharacter:FindFirstChildOfClass('Humanoid')
 		--if targetHumanoid.PlatformStand == true then return end
 
-		local targetPlayer = Players:GetPlayerFromCharacter(vHoldingCharacter.Value)
-		if targetPlayer then
-			local vCannotLift: BoolValue = fThrowCharacterSystemPlayer:FindFirstChild('CannotLift')
-			vCannotLift.Value = true
-		end
-
 		vHoldingCharacter.Value = targetCharacter
 		SetCollideCharacter(targetCharacter, false)
+
+		local targetPlayer = Players:GetPlayerFromCharacter(targetCharacter)
+		if targetPlayer then
+			local fThrowCharacterSystemTargetPlayer: Folder = targetPlayer['ThrowCharacterSystem']
+			local vCannotLift: BoolValue = fThrowCharacterSystemTargetPlayer:FindFirstChild('CannotLift')
+			vCannotLift.Value = true
+		end
 
 		return messageType
 
@@ -500,11 +538,8 @@ RFncThrow.OnServerInvoke = function(RequestPlayer: Player, targetCharacter: Mode
 			if targetPlayer then
 				local fThrowCharacterSystemTargetPlayer: Folder = targetPlayer['ThrowCharacterSystem']
 				local vCannotLift: BoolValue = fThrowCharacterSystemTargetPlayer:FindFirstChild('CannotLift')
-				print('cannot lift change')
 				vCannotLift.Value = false
 			end
-			print('vLastHoldCharacter.Value: ', vLastHoldCharacter.Value)
-			print('targetPlayer: ', targetPlayer)
 
 			if messageType == Settings.Enum.Throw then
 				local BodyForce = Instance.new('BodyForce')
