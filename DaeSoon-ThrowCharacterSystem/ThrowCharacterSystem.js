@@ -10,6 +10,7 @@ export const LuaCodeThrowCharacterSystem = `
 
 
 --// Service //--
+local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TweenService = game:GetService('TweenService')
 ----
@@ -55,8 +56,8 @@ end
 
 
 --// Constants //--
-local fThrowCharacterSystem = ReplicatedStorage['ThrowCharacterSystem']
-local fRemotes = fThrowCharacterSystem['Remotes']
+local fThrowCharacterSystemReplicated = ReplicatedStorage['ThrowCharacterSystem']
+local fRemotes = fThrowCharacterSystemReplicated['Remotes']
 
 ----// Settings //----
 local CannotTouchEndedTime = 0.25
@@ -66,19 +67,54 @@ local CannotTouchEndedTime = 0.25
 
 
 --// Remotes / Bindables //--
-local REvtThrow = fRemotes['Throw']
+local RFncThrow: RemoteFunction = fRemotes['Throw']
 ----
 
 
 
 --// Modules //--
-local Settings = require(fThrowCharacterSystem['Settings'])
+type TypeSettings = {
+	['Enum']: {
+		Lift: number,
+		Put: number,
+		Throw: number,
+	},
+
+	['CanThrowPlayerCharacter']: boolean,
+
+	['KeyCodeLift/Put']: Enum.KeyCode,
+	['KeyCodeThrow']: Enum.KeyCode,
+
+	['ThrowPower']: number,
+	['ThrowHeight']: number,
+
+	['LockCoolTime']: number,
+	['UnlockHeight']: number,
+
+	['DetectDistance']: number,
+
+	['ButtonTexts']: {
+		['Lift']: {
+			['ko-kr']: string,
+			['en-us']: string,
+		},
+		['Put']: {
+			['ko-kr']: string,
+			['en-us']: string,
+		},
+		['Throw']: {
+			['ko-kr']: string,
+			['en-us']: string,
+		},
+	},
+}
+local Settings: TypeSettings = require(fThrowCharacterSystemReplicated['Settings'])
 ----
 
 
 
 --// Variables //--
-local currentChararcter
+
 ----
 
 
@@ -172,69 +208,127 @@ local function CreateRayPart(character: Model, FrontDistance: number, oddCount: 
 	end
 end
 
-local function CreateValueTouchingCharacter(player: Player)
-	local vTouchingCharacter = Instance.new('ObjectValue')
-	vTouchingCharacter.Parent = player
-	vTouchingCharacter.Name = 'TouchingCharacter'
 
-	return vTouchingCharacter
-end
+local function GetThrowCharacterSystemFolder(player: Player)
+	local fThrowCharacterSystem: Folder = player:FindFirstChild('ThrowCharacterSystem')
 
-local function CreateValueIsLifting(character: Model)
-	local vIsLifting = Instance.new('BoolValue')
-	vIsLifting.Parent = character
-	vIsLifting.Name = 'IsLifting'
+	if not fThrowCharacterSystem then
+		fThrowCharacterSystem = Instance.new('Folder')
+		fThrowCharacterSystem.Parent = player
+		fThrowCharacterSystem.Name = 'ThrowCharacterSystem'
+		return fThrowCharacterSystem
 
-	return vIsLifting
-end
-
-local function CreateValueIsHandling(player: Player)
-	local vIsHandling = Instance.new('BoolValue')
-	vIsHandling.Parent = player
-	vIsHandling.Name = 'IsHandling'
-
-	return vIsHandling
-end
-
-local function OnIsLiftingChange(vIsLifting: BoolValue, character: Model)
-	if vIsLifting.Value then
-		for _, targetBasePart in character:GetChildren() do
-			task.spawn(function()
-				if targetBasePart.Name == 'LiftDetectPart' then return end
-				if not targetBasePart:IsA('BasePart') then return end
-				targetBasePart.CanCollide = false
-				targetBasePart.Massless = true
-			end)
-		end
 	else
-		for _, targetBasePart in character:GetChildren() do
-			task.spawn(function()
-				if targetBasePart.Name == 'LiftDetectPart' then return end
-				if not targetBasePart:IsA('BasePart') then return end
-				targetBasePart.CanCollide = true
-				targetBasePart.Massless = false
-			end)
-		end
+
+		return fThrowCharacterSystem
+	end
+
+end
+
+local function CreateValueHoldingCharacter(player: Player)
+	assert(player, 'Invalid argument #1. Player expected, got nil.')
+
+	local vHoldingCharacter = Instance.new('ObjectValue')
+	vHoldingCharacter.Parent = GetThrowCharacterSystemFolder(player)
+	vHoldingCharacter.Name = 'HoldingCharacter'
+
+	return vHoldingCharacter
+end
+
+local function CreateValueLastHoldCharacter(player: Player)
+	assert(player, 'Invalid argument #1. Player expected, got nil.')
+
+	local vLastHoldCharacter = Instance.new('ObjectValue')
+	vLastHoldCharacter.Parent = GetThrowCharacterSystemFolder(player)
+	vLastHoldCharacter.Name = 'LastHoldCharacter'
+
+	return vLastHoldCharacter
+end
+
+local function SetCollideCharacter(targetCharacter: Model, CanCollide: boolean)
+	for _, targetBasePart in targetCharacter:GetChildren() do
+		task.spawn(function()
+			if targetBasePart.Name == 'LiftDetectPart' then return end
+			if not targetBasePart:IsA('BasePart') then return end
+			targetBasePart.CanCollide = CanCollide
+			targetBasePart.Massless = not CanCollide
+		end)
 	end
 end
 
-local function CreateLiftDetectPart(character: Model)
-	local LiftDetectPart = Instance.new('Part')
-	LiftDetectPart.Parent = character
-	LiftDetectPart.Name = 'LiftDetectPart'
-	LiftDetectPart.Massless = true
-	LiftDetectPart.Transparency = 1
-	LiftDetectPart.Size = character.PrimaryPart.Size + Vector3.new(4, 4, 4)
-	LiftDetectPart.CanCollide = false
-	--LiftDetectPart.CanQuery = false
-	LiftDetectPart.CFrame = character.PrimaryPart.CFrame
-	local WeldConstraint = Instance.new('WeldConstraint')
-	WeldConstraint.Parent = LiftDetectPart
-	WeldConstraint.Part0 = LiftDetectPart
-	WeldConstraint.Part1 = character.PrimaryPart
+local function OnChangeValueHoldingCharacter(vHoldingCharacter: ObjectValue, vLastHoldCharacter: ObjectValue, RequestPlayer: Player)
 
-	return LiftDetectPart
+	local RequestCharacter = RequestPlayer.Character
+	if not RequestCharacter then return end
+	local targetCharacter: Model = vHoldingCharacter.Value
+
+	if vHoldingCharacter.Value then
+		-- Last hold character 설정
+		vLastHoldCharacter.Value = vHoldingCharacter.Value
+
+		-- Socket 생성
+		local HandPart: BasePart = RequestCharacter:FindFirstChild('RightHand') or RequestCharacter['Right Arm']
+		local Attachment0 = HandPart.RightGripAttachment
+		--local Attachment1 = targetCharacter.Head.FaceCenterAttachment
+		local Attachment1 = targetCharacter.PrimaryPart.RootAttachment
+		local BallSocketConstraint = Instance.new('BallSocketConstraint')
+		--BallSocketConstraint.Parent = RequestCharacter
+		BallSocketConstraint.Parent = vHoldingCharacter.Value
+		BallSocketConstraint.Name = 'Lift/ThrowSocket'
+		BallSocketConstraint.Attachment0 = Attachment0
+		BallSocketConstraint.Attachment1 = Attachment1
+		BallSocketConstraint.LimitsEnabled = true
+		BallSocketConstraint.TwistLimitsEnabled = true
+		BallSocketConstraint.TwistLowerAngle = -15
+		BallSocketConstraint.TwistUpperAngle = 15
+
+
+	else
+
+		-- Socket 제거
+		local socket: BallSocketConstraint = vLastHoldCharacter.Value['Lift/ThrowSocket']
+		socket:Destroy()
+		socket = nil
+		SetCollideCharacter(vLastHoldCharacter.Value, true)
+	end
 end
+
+local function CreateValueCannotLift(player: Player)
+	local vCannotLift = Instance.new('BoolValue')
+	vCannotLift.Parent = GetThrowCharacterSystemFolder(player)
+	vCannotLift.Name = 'CannotLift'
+
+	return vCannotLift
+end
+
+----// Archived_Server side game control functions //----
+--local function CreateValueTouchingCharacter(player: Player)
+--	assert(player, 'Invalid argument #1. Player expected, got nil.')
+
+--	local vTouchingCharacter = Instance.new('ObjectValue')
+--	vTouchingCharacter.Parent = GetThrowCharacterSystemFolder(player)
+--	vTouchingCharacter.Name = 'TouchingCharacter'
+
+--	return vTouchingCharacter
+--end
+
+--local function CreateLiftDetectPart(character: Model)
+--	local LiftDetectPart = Instance.new('Part')
+--	LiftDetectPart.Parent = character
+--	LiftDetectPart.Name = 'LiftDetectPart'
+--	LiftDetectPart.Massless = true
+--	LiftDetectPart.Transparency = 1
+--	LiftDetectPart.Size = character.PrimaryPart.Size + Vector3.new(4, 4, 4)
+--	LiftDetectPart.CanCollide = false
+--	--LiftDetectPart.CanQuery = false
+--	LiftDetectPart.CFrame = character.PrimaryPart.CFrame
+--	local WeldConstraint = Instance.new('WeldConstraint')
+--	WeldConstraint.Parent = LiftDetectPart
+--	WeldConstraint.Part0 = LiftDetectPart
+--	WeldConstraint.Part1 = character.PrimaryPart
+
+--	return LiftDetectPart
+--end
 
 --local touchedDebounces = {}
 --local touchendedDebounces = {}
@@ -243,7 +337,7 @@ end
 --	local touchedCharacter = coll.Parent
 --	if not touchedCharacter then return end
 --	if coll.Name ~= 'HumanoidRootPart' then return end
---	local touchedPlayer = game.Players:GetPlayerFromCharacter(touchedCharacter)
+--	local touchedPlayer = Players:GetPlayerFromCharacter(touchedCharacter)
 --	if not touchedPlayer then return end
 --	local Humanoid = touchedCharacter:FindFirstChildOfClass('Humanoid')
 --	if not Humanoid then return end
@@ -268,7 +362,7 @@ end
 --	if touchendedDebounces[character] then return end
 --	local touchedCharacter = coll.Parent
 --	if not touchedCharacter then return end
---	local touchedPlayer = game.Players:GetPlayerFromCharacter(touchedCharacter)
+--	local touchedPlayer = Players:GetPlayerFromCharacter(touchedCharacter)
 --	if not touchedPlayer then return end
 --	local Humanoid = touchedCharacter:FindFirstChildOfClass('Humanoid')
 --	if not Humanoid then return end
@@ -282,6 +376,7 @@ end
 
 --	touchendedDebounces[character] = false
 --end
+--------
 
 
 local function SetupNPC()
@@ -289,7 +384,7 @@ local function SetupNPC()
 		if not npc:IsA('Model') then continue end
 		local Humanoid = npc:FindFirstChildOfClass('Humanoid')
 		if not Humanoid then continue end
-		local player = game.Players:GetPlayerFromCharacter(npc)
+		local player = Players:GetPlayerFromCharacter(npc)
 		if player then continue end
 
 
@@ -301,12 +396,12 @@ local function SetupNPC()
 		--	LiftDetectPart.TouchEnded:Connect(function(coll) OnTouchEndedLiftDetectPart(coll, npc) end)
 		--end)()
 
-		;(function()
-			local vIsLifting = CreateValueIsLifting(npc)
-			vIsLifting:GetPropertyChangedSignal('Value'):Connect(function()
-				OnIsLiftingChange(vIsLifting, npc)
-			end)
-		end)()
+		--;(function()
+		--	local vCannotLift = CreateValueCannotLift(npc)
+		--	vCannotLift:GetPropertyChangedSignal('Value'):Connect(function()
+		--		OnChangeValueCannotLift(vCannotLift, npc)
+		--	end)
+		--end)()
 
 	end
 end
@@ -325,42 +420,38 @@ local playerAdded = {}
 local function OnPlayerAdded(player: Player)
 	playerAdded[player] = true
 
-	CreateValueTouchingCharacter(player)
+	--CreateValueTouchingCharacter(player)
 
 	local character = player.Character
 	if not character then character = player.CharacterAppearanceLoaded:Wait() end
 
 	-- Setup raycast part
-	CreateRayPart(player.Character, 4, 5)
+	CreateRayPart(character, 4, 5)
+
+	-- Setup Value Last Hold Character
+	local vLastHoldCharacter = CreateValueLastHoldCharacter(player)
+
+	-- Setup Value Holding Character
+	local vHoldingCharacter = CreateValueHoldingCharacter(player)
+	vHoldingCharacter:GetPropertyChangedSignal('Value'):Connect(function()
+		OnChangeValueHoldingCharacter(vHoldingCharacter, vLastHoldCharacter, player)
+	end)
 
 	-- Setup LiftDetectPart
-	;(function()
-		local LiftDetectPart = CreateLiftDetectPart(character)
+	--;(function()
+	--	local LiftDetectPart = CreateLiftDetectPart(character)
 
-		--LiftDetectPart.Touched:Connect(function(coll) OnTouchedLiftDetectPart(coll, character) end)
+	--	--LiftDetectPart.Touched:Connect(function(coll) OnTouchedLiftDetectPart(coll, character) end)
 
-		--LiftDetectPart.TouchEnded:Connect(function(coll) OnTouchEndedLiftDetectPart(coll, character) end)
-	end)()
+	--	--LiftDetectPart.TouchEnded:Connect(function(coll) OnTouchEndedLiftDetectPart(coll, character) end)
+	--end)()
 
-	-- Setup vIsLifting
-	;(function()
-		local vIsLifting = CreateValueIsLifting(character)
-		vIsLifting:GetPropertyChangedSignal('Value'):Connect(function()
-			OnIsLiftingChange(vIsLifting, character)
-		end)
-	end)()
-
-	-- Setup vIsHandling
-	;(function()
-		local vIsHandling = CreateValueIsHandling(player)
-		--vIsHandling:GetPropertyChangedSignal('Value'):Connect(function()
-		--	OnIsHandlingChange(vIsHandling, character)
-		--end)
-	end)()
+	-- Setup vCannotLift
+	local vCannotLift = CreateValueCannotLift(player)
 end
 
 local function CheckPlayerAdded()
-	for _, player in pairs(game.Players:GetPlayers()) do
+	for _, player in pairs(Players:GetPlayers()) do
 		if playerAdded[player] then continue end
 		OnPlayerAdded(player)
 	end
@@ -369,100 +460,73 @@ end
 local function OnPlayerRemoving(player: Player)
 	playerAdded[player] = nil
 end
-game.Players.PlayerAdded:Connect(OnPlayerAdded)
-game.Players.PlayerRemoving:Connect(OnPlayerRemoving)
+Players.PlayerAdded:Connect(OnPlayerAdded)
+Players.PlayerRemoving:Connect(OnPlayerRemoving)
 CheckPlayerAdded()
 
 
-REvtThrow.OnServerEvent:Connect(function(RequestPlayer: Player, targetCharacter: Model, messageType: number)
+RFncThrow.OnServerInvoke = function(RequestPlayer: Player, targetCharacter: Model, messageType: number)
+	print('messageType: ', messageType)
 	local RequestCharacter = RequestPlayer.Character
 
-	if messageType == Settings.Enum.Lift and not currentChararcter then
+	local fThrowCharacterSystemPlayer: Folder = GetThrowCharacterSystemFolder(RequestPlayer)
+	local vHoldingCharacter: ObjectValue = fThrowCharacterSystemPlayer: WaitForChild('HoldingCharacter', 5)
+
+	if messageType == Settings.Enum.Lift and not vHoldingCharacter.Value then
 		local targetHumanoid = targetCharacter:FindFirstChildOfClass('Humanoid')
-		if targetHumanoid.PlatformStand == true then return end
+		--if targetHumanoid.PlatformStand == true then return end
 
-		currentChararcter = targetCharacter
+		local targetPlayer = Players:GetPlayerFromCharacter(vHoldingCharacter.Value)
+		if targetPlayer then
+			local vCannotLift: BoolValue = fThrowCharacterSystemPlayer:FindFirstChild('CannotLift')
+			vCannotLift.Value = true
+		end
 
-		pcall(function()
-			RequestPlayer.IsHandling.Value = true
-		end)
+		vHoldingCharacter.Value = targetCharacter
+		SetCollideCharacter(targetCharacter, false)
 
-		--for _, targetBasePart in currentChararcter:GetChildren() do
-		--	if not targetBasePart:IsA('BasePart') then continue end
-		--	targetBasePart.Massless = true
-		--	for _, requestBasePart in RequestCharacter:GetChildren() do
-		--		if not requestBasePart:IsA('BasePart') then continue end
-		--		local NoCollisionConstraint = Instance.new('NoCollisionConstraint')
-		--		NoCollisionConstraint.Parent = targetBasePart
-		--		NoCollisionConstraint.Part0 = requestBasePart
-		--		NoCollisionConstraint.Part1 = targetBasePart
-		--		break
-		--	end
-		--end
-		--for _, targetBasePart in targetCharacter:GetChildren() do
-		--	if targetBasePart.Name == 'LiftDetectPart' then continue end
-		--	if not targetBasePart:IsA('BasePart') then continue end
-		--	targetBasePart.Massless = true
-		--	targetBasePart.CanCollide = false
-		--end
-		-- OnIsLiftingChange()로 이동
-		local vIsLifting: BoolValue = currentChararcter:FindFirstChild('IsLifting')
-		vIsLifting.Value = true
-
-		local HandPart: BasePart = RequestCharacter:FindFirstChild('RightHand') or RequestCharacter['Right Arm']
-		local Attachment0 = HandPart.RightGripAttachment
-		--local Attachment1 = targetCharacter.Head.FaceCenterAttachment
-		local Attachment1 = targetCharacter.PrimaryPart.RootAttachment
-		local BallSocketConstraint = Instance.new('BallSocketConstraint')
-		BallSocketConstraint.Parent = RequestCharacter
-		BallSocketConstraint.Name = 'Lift/ThrowSocket'
-		BallSocketConstraint.Attachment0 = Attachment0
-		BallSocketConstraint.Attachment1 = Attachment1
-		BallSocketConstraint.LimitsEnabled = true
-		BallSocketConstraint.TwistLimitsEnabled = true
-		BallSocketConstraint.TwistLowerAngle = -15
-		BallSocketConstraint.TwistUpperAngle = 15
+		return messageType
 
 	else
-		if RequestCharacter:FindFirstChild('Lift/ThrowSocket') then
-			RequestCharacter['Lift/ThrowSocket']:Destroy()
 
-			--for _, targetBasePart: BasePart in currentChararcter:GetChildren() do
-			--	if not targetBasePart:IsA('BasePart') then continue end
-			--	targetBasePart.Massless = false
-			--	for _, requestBasePart in RequestCharacter:GetChildren() do
-			--		if not requestBasePart:IsA('BasePart') then continue end
-			--		pcall(function()
-			--			local target: Instance = currentChararcter.NoCollisionConstraint
-			--			target:Destroy()
-			--		end)
-			--		break
-			--	end
-			--end
-			-- playeradded - OnIsLiftingChange()로 이동
-			local vIsLifting: BoolValue = currentChararcter:FindFirstChild('IsLifting')
-			vIsLifting.Value = false
+		local vLastHoldCharacter: ObjectValue = fThrowCharacterSystemPlayer:FindFirstChild('LastHoldCharacter')
 
-			pcall(function()
-				RequestPlayer.IsHandling.Value = true
-			end)
+		if vLastHoldCharacter.Value:FindFirstChild('Lift/ThrowSocket') then
+
+			local vHoldingCharacter: ObjectValue = fThrowCharacterSystemPlayer:FindFirstChild('HoldingCharacter')
+			vHoldingCharacter.Value = nil
+
+			local targetPlayer = Players:GetPlayerFromCharacter(vLastHoldCharacter.Value)
+			if targetPlayer then
+				local fThrowCharacterSystemTargetPlayer: Folder = targetPlayer['ThrowCharacterSystem']
+				local vCannotLift: BoolValue = fThrowCharacterSystemTargetPlayer:FindFirstChild('CannotLift')
+				print('cannot lift change')
+				vCannotLift.Value = false
+			end
+			print('vLastHoldCharacter.Value: ', vLastHoldCharacter.Value)
+			print('targetPlayer: ', targetPlayer)
 
 			if messageType == Settings.Enum.Throw then
 				local BodyForce = Instance.new('BodyForce')
-				BodyForce.Parent = currentChararcter.HumanoidRootPart
+				BodyForce.Parent = vLastHoldCharacter.Value.HumanoidRootPart
 				local LookVector = RequestCharacter:GetPivot().LookVector
 				BodyForce.Force = LookVector * Settings['ThrowPower'] * Vector3.new(1, Settings['ThrowHeight'], 1)
 				local tweenInfo = TweenInfo.new(1)
 				local goal = {Force = Vector3.new(0, 0, 0)}
 				TweenService:Create(BodyForce, tweenInfo, goal):Play()
 
-				ThrowCharacter(currentChararcter)
+				ThrowCharacter(vLastHoldCharacter.Value)
+
+				return messageType
 			end
+
+			vHoldingCharacter.Value = nil
+
+			return messageType
 		end
 
-		currentChararcter = nil
 	end
-end)
+end
 
 
 SetupNPC()
