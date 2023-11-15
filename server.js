@@ -28,7 +28,7 @@ app.get('/snszmfl-SnowballFightTower/:gameID/:ScriptName', Route_snszmfl_Snowbal
 app.get('/daesoon-ThrowCharacterSystem/:gameID/:ScriptName', Route_DaeSoon_ThrowCharacterSystem);
 
 // derqqq12345 Place
-app.get('/derqqq12345-GlobalValueSystem/:gameID/:ScriptName', Route_derqqq12345_WorldSimulator);
+app.get('/derqqq12345-WorldSimulator/:gameID/:ScriptName', Route_derqqq12345_WorldSimulator);
 
 
 
