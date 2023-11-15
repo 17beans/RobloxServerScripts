@@ -152,7 +152,7 @@ local function CreateValue(parent: folder, valueName: string, value: string|numb
 	assert(parent, 'Invalid argument #1 parent. Folder expected, got nil')
 	assert(typeof(parent) == 'Instance', ('Invalid argument #1 parent. Folder expected got %s'):format(typeof(parent)))
 	assert(valueName, 'Invalid argument #2 valueName. string expected, got nil.')
-	assert(value, 'Invalid argument #3 value. string|number|boolean expected, got nil')
+	assert(value ~= nil, 'Invalid argument #3 value. string|number|boolean expected, got nil')
 
 	local isBool, isNumber = CheckValueType(value)
 	local newValue
@@ -180,7 +180,7 @@ local function ChangeValue(categoryNameA: string|nil, categoryNameB: string|nil,
 
 	assert(valueName, 'Invalid argument #3 valueName. string expected, got nil.')
 	assert(typeof(valueName) == 'string', ('Invalid argument #3 valueName. string expected, got %s'):format(typeof(valueName)))
-	assert(value, 'Invalid argument #4 value. string expected, got nil.')
+	assert(value ~= nil, 'Invalid argument #4 value. string expected, got nil.')
 	assert(
 		typeof(value) == 'string' or typeof(value) == 'number' or typeof(value) == 'boolean',
 		('Invalid argument #4 value. string|number|boolean expected, got %s')
@@ -196,8 +196,8 @@ local function ChangeValue(categoryNameA: string|nil, categoryNameB: string|nil,
 		assert(valueName, 'Invalid argument #2 valueName, nil')
 		assert(typeof(valueName) == 'string', ('Invalid argument #2 valueName type, %s'):format(typeof(valueName)))
 
-		assert(value, 'Invalid argument #3 value, nil')
-		assert(value, ('Invalid argument #3 value type, %s'):format(typeof(value)))
+		assert(value ~= nil, 'Invalid argument #3 value, nil')
+		assert(typeof(value) == 'boolean', ('Invalid argument #3 value type, %s'):format(typeof(value)))
 
 
 		-- Value 탐색
@@ -324,7 +324,7 @@ local function OnMessageChangeValue(datas)
 	assert(typeof(categoryNameB) == 'string' or typeof(categoryNameB) == nil, ('Invalid argument #3 categoryNameB. string|nil expected, got %s.'):format(typeof(categoryNameB)))
 	assert(valueName, 'Invalid argument #4 valueName. string expected, got nil')
 	assert(typeof(valueName) == 'string', ('Invalid argument #4 valueName. string expected, got %s'):format(typeof(valueName)))
-	assert(value, 'Invalid argument #5 value. string|number|boolean expected, got nil.')
+	assert(value ~= nil, 'Invalid argument #5 value. string|number|boolean expected, got nil.')
 	assert(
 		typeof(value) == 'string' or
 			typeof(value) == 'number' or
