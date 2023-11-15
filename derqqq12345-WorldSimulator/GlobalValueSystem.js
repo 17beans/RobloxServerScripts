@@ -102,7 +102,7 @@ local fGlobalValueSystemReplicated = ReplicatedStorage.GlobalValueSystem
 local fBindables: Folder = fGlobalValueSystemReplicated.Bindables
 
 local targetFolder = script.TargetFolder.Value
-assert(targetFolder, 'Invalid targetFolder. Instance expected, got', targetFolder)
+assert(targetFolder, '값 폴더를 지정하지 않았습니다. 값 폴더를 지정해주세요. (No value folder was specified. Please set the value folder)', targetFolder)
 assert(typeof(targetFolder) == 'Instance', ('Invalid targetFolder. Folder expected, got %s'):format(typeof(targetFolder)))
 ----
 
