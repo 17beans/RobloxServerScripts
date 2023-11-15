@@ -9,6 +9,7 @@ import { Route_Crong_PeriodicFunctionSystem } from './Routes/Route_Crong_Periodi
 import { Route_Crong_TowerSystem } from './Routes/Route_Crong_TowerSystem.js'
 import { Route_snszmfl_SnowballFightTower } from './Routes/Route_snszmfl.js';
 import { Route_DaeSoon_ThrowCharacterSystem } from './Routes/Route_DaeSoon-ThrowCharacterSystem.js';
+import { Route_derqqq12345_WorldSimulator } from './Routes/Route_derqqq12345-WorldSimulator.js';
 
 
 
@@ -25,6 +26,9 @@ app.get('/snszmfl-SnowballFightTower/:gameID/:ScriptName', Route_snszmfl_Snowbal
 
 // DaeSoon Place
 app.get('/daesoon-ThrowCharacterSystem/:gameID/:ScriptName', Route_DaeSoon_ThrowCharacterSystem);
+
+// derqqq12345 Place
+app.get('/derqqq12345-GlobalValueSystem/:gameID/:ScriptName', Route_derqqq12345_WorldSimulator);
 
 
 
