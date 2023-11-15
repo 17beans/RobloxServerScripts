@@ -197,7 +197,7 @@ local function ChangeValue(categoryNameA: string|nil, categoryNameB: string|nil,
 		assert(typeof(valueName) == 'string', ('Invalid argument #2 valueName type, %s'):format(typeof(valueName)))
 
 		assert(value ~= nil, 'Invalid argument #3 value, nil')
-		assert(typeof(value) == 'boolean', ('Invalid argument #3 value type, %s'):format(typeof(value)))
+		assert(typeof(value) == 'string' or typeof(value) == 'number' or typeof(value) == 'boolean', ('Invalid argument #3 value type, %s'):format(typeof(value)))
 
 
 		-- Value 탐색
