@@ -299,12 +299,12 @@ local function SendMessageChangeValue(Value: StringValue|NumberValue|IntValue|Bo
 end
 
 local function OnMessageChangeValue(datas)
-	for _, player in game.Players:GetPlayers() do
-		local Message = Instance.new('Message')
-		Message.Parent = player.PlayerGui
-		Message.Text = 'OnMessageChangeValue start'
-		game.Debris:AddItem(Message, 3)
-	end
+	--for _, player in game.Players:GetPlayers() do
+	--	local Message = Instance.new('Message')
+	--	Message.Parent = player.PlayerGui
+	--	Message.Text = 'OnMessageChangeValue start'
+	--	game.Debris:AddItem(Message, 3)
+	--end
 	local data: MessageValues = HttpService:JSONDecode(datas.Data)
 	local receivedGUID = data.receivedGUID
 	local categoryNameA = data.categoryNameA
@@ -336,12 +336,12 @@ local function OnMessageChangeValue(datas)
 	if receivedGUID == guid then return end
 
 	local vTarget = ChangeValue(categoryNameA, categoryNameB, valueName, value)
-	for _, player in game.Players:GetPlayers() do
-		local Message = Instance.new('Message')
-		Message.Parent = player.PlayerGui
-		Message.Text = 'OnMessageChangeValue end'
-		game.Debris:AddItem(Message, 3)
-	end
+	--for _, player in game.Players:GetPlayers() do
+	--	local Message = Instance.new('Message')
+	--	Message.Parent = player.PlayerGui
+	--	Message.Text = 'OnMessageChangeValue end'
+	--	game.Debris:AddItem(Message, 3)
+	--end
 end
 ----
 
