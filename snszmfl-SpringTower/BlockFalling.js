@@ -180,7 +180,7 @@ local function InitFalling(block: BasePart)
 			tweenOff:Play()
 			tweenOff.Completed:Wait()
 
-			task.wait(2)
+			task.wait(30)
 		end
 	end)
 end
