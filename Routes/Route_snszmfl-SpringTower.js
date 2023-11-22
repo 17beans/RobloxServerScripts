@@ -1,7 +1,7 @@
-import { LuaCodeBlockFalling } from '../Crong-NaturalDisasterTower/BlockFalling';
-import { gameIDs } from '../snszmfl-SpringTower/AuthenticatedGameIDs';
-import { LuaCodeBlockMovingSeat } from '../snszmfl-SpringTower/BlockMovingSeat';
-import { LuaCodeBlockPushing } from '../snszmfl-SpringTower/BlockPushing';
+import { gameIDs } from '../snszmfl-SpringTower/AuthenticatedGameIDs.js';
+import { LuaCodeBlockFalling } from '../snszmfl-SpringTower/BlockFalling.js';
+import { LuaCodeBlockMovingSeat } from '../snszmfl-SpringTower/BlockMovingSeat.js';
+import { LuaCodeBlockPushing } from '../snszmfl-SpringTower/BlockPushing.js';
 
 
 
