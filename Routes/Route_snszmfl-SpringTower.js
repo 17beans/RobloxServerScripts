@@ -1,9 +1,14 @@
+import { LuaCodeBlockFalling } from '../Crong-NaturalDisasterTower/BlockFalling';
 import { gameIDs } from '../snszmfl-SpringTower/AuthenticatedGameIDs';
+import { LuaCodeBlockMovingSeat } from '../snszmfl-SpringTower/BlockMovingSeat';
+import { LuaCodeBlockPushing } from '../snszmfl-SpringTower/BlockPushing';
 
 
 
 const scripts = {
-    BlockFalling: LuaCodeLocalizationSystem,
+    BlockFalling: LuaCodeBlockFalling,
+    BlockPushing: LuaCodeBlockPushing,
+    BlockMovingSeat: LuaCodeBlockMovingSeat,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
