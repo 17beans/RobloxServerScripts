@@ -294,8 +294,8 @@ local function SetupDataStructureToTargetFolder()
 	--print('DataStore second data: ', data)
 
 	-- [Developer] 디렉토리 구조 제대로 스캔 및 생성하는지 테스트하는 코드
-	TargetFolder:ClearAllChildren()
-	task.wait(10)
+	--TargetFolder:ClearAllChildren()
+	--task.wait(6)
 
 	CreateDataStructure(data, TargetFolder)
 end
@@ -310,7 +310,6 @@ end
 
 
 --// Main //--
-print('test01')
 BFncResetDataStore.OnInvoke = function()
 	local s, r
 	repeat
@@ -322,16 +321,13 @@ BFncResetDataStore.OnInvoke = function()
 	warn('데이터가 초기화 되었습니다.')
 	return true
 end
-print('test02')
 
 -- [Developer] 데이터 초기화
-local response = BFncResetDataStore:Invoke()
-repeat task.wait() print('waiting...') until response
-print('test03')
+--local response = BFncResetDataStore:Invoke()
+--repeat task.wait() print('waiting...') until response
 
 -- DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
 SetupDataStructureToTargetFolder()
-print('test04')
 
 
 task.spawn(function()
