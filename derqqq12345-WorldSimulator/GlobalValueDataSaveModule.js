@@ -352,8 +352,8 @@ end
 --local response = BFncResetDataStore:Invoke()
 --repeat task.wait() print('waiting...') until response
 
--- DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
-SetupDataStructureToTargetFolder()
+-- [Developer] DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
+--SetupDataStructureToTargetFolder()
 
 
 task.spawn(function()

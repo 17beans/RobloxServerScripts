@@ -95,6 +95,53 @@ local BEvtChangeValue: BindableEvent = fBindables.ChangeValue
 
 
 --// Functions //--
+local function ReductionPath(path: string?, Value: StringValue?|NumberValue?|BoolValue?|Color3Value?|BrickColorValue?|Vector3Value?|CFrameValue?)
+	local newPath: string = ''
+
+	if path then
+		local nameTable = string.split(path, '.')
+		local targetFolderIndex = 0
+		for i, v in pairs(nameTable) do
+			if v ~= TargetFolder.Name then continue end
+			targetFolderIndex = i
+		end
+		for i=1, targetFolderIndex, 1 do
+			table.remove(nameTable, 1)
+		end
+		for i=1, #nameTable do
+			if newPath == '' then
+				newPath = nameTable[i]
+			else
+				newPath = newPath .. '.' .. nameTable[i]
+			end
+		end
+
+	elseif Value then
+
+		local path: string = Value:GetFullName()
+		local nameTable = string.split(path, '.')
+		local targetFolderIndex = 0
+		for i, v in pairs(nameTable) do
+			if v ~= TargetFolder.Name then continue end
+			targetFolderIndex = i
+		end
+		for i=1, targetFolderIndex, 1 do
+			table.remove(nameTable, 1)
+		end
+		for i=1, #nameTable do
+			if newPath == '' then
+				newPath = nameTable[i]
+			else
+				newPath = newPath .. '.' .. nameTable[i]
+			end
+		end
+	end
+
+
+	return newPath
+end
+
+
 local function GetValueParent(Parent: Folder, categoryName: string)
 	assert(typeof(Parent) == 'Instance', ('Invalid argument #1 Parent. Folder expected, got %s'):format(typeof(Parent)))
 	assert(Parent.ClassName == 'Folder', ('Invalid argument #1 Parent. Folder expected, got %s'):format(Parent.ClassName))
@@ -114,11 +161,12 @@ local function GetValueParent(Parent: Folder, categoryName: string)
 end
 
 local function GetValueNameAndParentFromFullPath(path)
+	-- path를 targetFolder 내부로 축소
+	local newPath = ReductionPath(path, nil)
 	-- ReplicatedStorage 등 컨데이너명은 제외된 상태로 경로 데이터 수신
-	local nameTable = string.split(path, '.')
+	local nameTable = string.split(newPath, '.')
 	-- ValueBase 이름
 	local valueName = nameTable[#nameTable]
-
 	-- 첫 valueParent를 targetFolder로 설정, 이후 실제 Value의 Parent를 구하기
 	local ValueParent = TargetFolder
 	-- nameTable  마지막에 있는 valueName에 대한 값 제거
@@ -268,29 +316,15 @@ local function SendMessageChangeValue(Value: StringValue|NumberValue|BoolValue|C
 			or Value:IsA('NumberValue')
 			or Value:IsA('BoolValue')
 			or Value:IsA('Color3Value')
+			or Value:IsA('BrickColorValue')
+			or Value:IsA('Vector3Value')
+			or Value:IsA('CFrameValue')
 		,
-		('Invalid argument #1 Value. StringValue|NumberValue|BoolValue|Color3Value|BrickColorValue|Vector3Value|CFrameValue expected, got %s.'):format(typeof(Value))
+		('Invalid argument #1 Value. StringValue|NumberValue|BoolValue|Color3Value|BrickColorValue|Vector3Value|CFrameValue expected, got %s.'):format(Value.ClassName)
 	)
 
 	-- path를 targetFolder 내부로 축소
-	local path: string = Value:GetFullName()
-	local nameTable = string.split(path, '.')
-	local targetFolderIndex
-	for i, v in pairs(nameTable) do
-		if v ~= TargetFolder.Name then continue end
-		targetFolderIndex = i
-	end
-	for i=1, targetFolderIndex, 1 do
-		table.remove(nameTable, 1)
-	end
-	local newPath: string = ''
-	for i=1, #nameTable do
-		if newPath == '' then
-			newPath = nameTable[i]
-		else
-			newPath = newPath .. '.' .. nameTable[i]
-		end
-	end
+	local newPath = ReductionPath(nil, Value)
 
 	local value: string|number|boolean|Color3|BrickColor|Vector3|CFrame = tostring(Value.Value)
 	if Value:IsA('Color3Value') then
@@ -334,6 +368,54 @@ local function OnMessageChangeValue(datas)
 	if receivedGUID == guid then return end
 
 	local ValueBase = ChangeValue(path, value)
+
+
+
+	----// 시연용 코드 1/2 //----
+--	local isColor3 = string.find(value, '_Color3')
+--	local isBrickColor = string.find(value, '_BrickColor')
+--	local isVector3 = string.find(value, '_Vector3')
+--	local isCFrame = string.find(value, '_CFrame')
+--	local isString = typeof(value) == 'string'
+--	local isNumber = typeof(value) == 'number'
+--	local isBoolean = typeof(value) == 'boolean'
+--	local valueType, newValue = nil, value
+--	if isColor3 then
+--		valueType = 'Color3'
+--		local color3 = string.split(value, '_Color3')[1]
+--		local nameTable = string.split(color3, ', ')
+--		newValue = Color3.new(nameTable[1], nameTable[2], nameTable[3])
+--	elseif isBrickColor then
+--		valueType = 'BrickColor'
+--		local brickColor = string.split(value, '_BrickColor')[1]
+--		newValue = BrickColor.new(brickColor)
+--	elseif isVector3 then
+--		valueType = 'Vector3'
+--		local vector3 = string.split(value, '_Vector3')[1]
+--		local nameTable = string.split(vector3, ', ')
+--		newValue = Vector3.new(nameTable[1], nameTable[2], nameTable[3])
+--	elseif isCFrame then
+--		valueType = 'CFrame'
+--		local vector3 = string.split(value, '_CFrame')[1]
+--		local nameTable = string.split(vector3, ', ')
+--		newValue = CFrame.new(nameTable[1], nameTable[2], nameTable[3], nameTable[4], nameTable[5], nameTable[6], nameTable[7], nameTable[8], nameTable[9], nameTable[10], nameTable[11], nameTable[12])
+--	elseif isString then
+--		valueType = 'string'
+--	elseif isNumber then
+--		valueType = 'number'
+--	elseif isBoolean then
+--		valueType = 'boolean'
+--	end
+--	for _, player in pairs(game.Players:GetPlayers()) do
+--		local Message = Instance.new('Message')
+--		Message.Parent = player.PlayerGui
+--		Message.Text = ([[동일 게임의 타 서버로부터 Value 생성/변경 요청을 수신하여 처리하였습니다.
+--경로: %s
+--값 타입: %s
+--설정값: %s]]):format(path, valueType, tostring(newValue))
+--		game.Debris:AddItem(Message, 5)
+--	end
+	--------
 end
 ----
 
@@ -353,4 +435,115 @@ BEvtChangeValue.Event:Connect(
 		local ValueBase = ChangeValue(path, value)
 		SendMessageChangeValue(ValueBase)
 	end)
+
+
+
+----// 시연용 코드 2/2 //----
+--local UpdateNumberStart = workspace.UpdateNumberStart
+--local UpdateStringStart = workspace.UpdateStringStart
+--local UpdateBrickColorStart = workspace.UpdateBrickColorStart
+--local UpdateVector3Start = workspace.UpdateVector3Start
+--local UpdateNumberEnd = workspace.UpdateNumberEnd
+--local UpdateStringEnd = workspace.UpdateStringEnd
+--local UpdateBrickColorEnd = workspace.UpdateBrickColorEnd
+--local UpdateVector3End = workspace.UpdateVector3End
+--local vNumber = TargetFolder.UpdateNumberValue
+--local vString = TargetFolder.UpdateStringValue
+--local vBrickColor = TargetFolder.UpdateValue_BrickColor
+--local vVector3 = TargetFolder.UpdateValue_Vector3
+
+--vNumber:GetPropertyChangedSignal('Value'):Connect(function()
+--	workspace.UpdateNumberEnd.SurfaceGui.TextLabel.Text = vNumber.Value
+--end)
+--vString:GetPropertyChangedSignal('Value'):Connect(function()
+--	workspace.UpdateStringEnd.SurfaceGui.TextLabel.Text = vString.Value
+--end)
+--vBrickColor:GetPropertyChangedSignal('Value'):Connect(function()
+--	workspace.UpdateBrickColorEnd.BrickColor = vBrickColor.Value
+--end)
+--vVector3:GetPropertyChangedSignal('Value'):Connect(function()
+--	workspace.UpdateVector3End.SurfaceGui.TextLabel.Text = tostring(vVector3.Value)
+--end)
+
+--local numberdebounce = false
+--UpdateNumberStart.Touched:Connect(function(coll)
+--	if numberdebounce then return end
+--	local character = coll.Parent
+--	if not character then return end
+--	local player = game.Players:GetPlayerFromCharacter(character)
+--	if not player then return end
+--	local Humanoid = character:FindFirstChildOfClass('Humanoid')
+--	if not Humanoid then return end
+--	if not (Humanoid.Health > 0) then return end
+--	local HRP: Part = character:FindFirstChild('HumanoidRootPart')
+--	if not HRP then return end
+
+--	numberdebounce = true
+--	local path = 'PartProps.UpdateNumberValue'
+--	local value = 1234
+--	BEvtChangeValue:Fire(path, value)
+--	task.wait(1)
+--	numberdebounce = false
+--end)
+--local stringdebounce = false
+--UpdateStringStart.Touched:Connect(function(coll)
+--	if stringdebounce then return end
+--	local character = coll.Parent
+--	if not character then return end
+--	local player = game.Players:GetPlayerFromCharacter(character)
+--	if not player then return end
+--	local Humanoid = character:FindFirstChildOfClass('Humanoid')
+--	if not Humanoid then return end
+--	if not (Humanoid.Health > 0) then return end
+--	local HRP: Part = character:FindFirstChild('HumanoidRootPart')
+--	if not HRP then return end
+
+--	stringdebounce = true
+--	local path = 'PartProps.UpdateStringValue'
+--	local value = 'newString'
+--	BEvtChangeValue:Fire(path, value)
+--	task.wait(1)
+--	stringdebounce = false
+--end)
+--local brickcolordebounce = false
+--UpdateBrickColorStart.Touched:Connect(function(coll)
+--	if brickcolordebounce then return end
+--	local character = coll.Parent
+--	if not character then return end
+--	local player = game.Players:GetPlayerFromCharacter(character)
+--	if not player then return end
+--	local Humanoid = character:FindFirstChildOfClass('Humanoid')
+--	if not Humanoid then return end
+--	if not (Humanoid.Health > 0) then return end
+--	local HRP: Part = character:FindFirstChild('HumanoidRootPart')
+--	if not HRP then return end
+
+--	brickcolordebounce = true
+--	local path = 'PartProps.UpdateValue_BrickColor'
+--	local value = tostring(BrickColor.new('Sand yellow'))..'_BrickColor'
+--	BEvtChangeValue:Fire(path, value)
+--	task.wait(1)
+--	brickcolordebounce = false
+--end)
+--local vector3debounce = false
+--UpdateVector3Start.Touched:Connect(function(coll)
+--	if vector3debounce then return end
+--	local character = coll.Parent
+--	if not character then return end
+--	local player = game.Players:GetPlayerFromCharacter(character)
+--	if not player then return end
+--	local Humanoid = character:FindFirstChildOfClass('Humanoid')
+--	if not Humanoid then return end
+--	if not (Humanoid.Health > 0) then return end
+--	local HRP: Part = character:FindFirstChild('HumanoidRootPart')
+--	if not HRP then return end
+
+--	vector3debounce = true
+--	local path = 'PartProps.UpdateValue_Vector3'
+--	local value = tostring(Vector3.new(12, 13, 14))..'_Vector3'
+--	BEvtChangeValue:Fire(path, value)
+--	task.wait(1)
+--	vector3debounce = false
+--end)
+--------
 ----`
