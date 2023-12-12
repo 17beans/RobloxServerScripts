@@ -6,7 +6,7 @@ import { LuaCodeGlobalValueDataSaveModule } from "../derqqq12345-WorldSimulator/
 
 const scripts = {
     GlobalValueSystem: LuaCodeGlobalValueSystem,
-    GlovalValueDataSaveModule: LuaCodeGlobalValueDataSaveModule,
+    GlobalValueDataSaveModule: LuaCodeGlobalValueDataSaveModule,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
