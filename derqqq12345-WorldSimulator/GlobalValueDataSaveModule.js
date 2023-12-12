@@ -310,6 +310,7 @@ end
 
 
 --// Main //--
+print('test01')
 BFncResetDataStore.OnInvoke = function()
 	local s, r
 	repeat
@@ -321,13 +322,16 @@ BFncResetDataStore.OnInvoke = function()
 	warn('데이터가 초기화 되었습니다.')
 	return true
 end
+print('test02')
 
 -- [Developer] 데이터 초기화
 local response = BFncResetDataStore:Invoke()
 repeat task.wait() print('waiting...') until response
+print('test03')
 
 -- DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
 SetupDataStructureToTargetFolder()
+print('test04')
 
 
 task.spawn(function()
