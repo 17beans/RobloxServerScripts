@@ -20,7 +20,7 @@ local HttpService = game:GetService('HttpService')
 
 
 --// Presetup //--
-local Config = script.Parent:WaitForChild('Config', 5)
+local Config = script.Parent.Config
 local DataStoreName = Config.DataStoreName.Value
 local DataStore = DataStoreService:GetDataStore(DataStoreName)
 ----
@@ -293,8 +293,9 @@ local function SetupDataStructureToTargetFolder()
 	local data = HttpService:JSONDecode(jsonData)
 	--print('DataStore second data: ', data)
 
-	-- [Developer] 디렉토리 구조 제대로 스캔 및 생성하는지 테스트하는 코드ㄹ
+	-- [Developer] 디렉토리 구조 제대로 스캔 및 생성하는지 테스트하는 코드
 	TargetFolder:ClearAllChildren()
+	task.wait(10)
 
 	CreateDataStructure(data, TargetFolder)
 end
