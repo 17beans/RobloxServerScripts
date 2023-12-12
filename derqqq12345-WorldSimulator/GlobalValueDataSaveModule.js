@@ -241,35 +241,61 @@ local function CreateDataStructure(parsedTable: {}, targetInstance: Folder|Strin
 		then
 			local newValue = v
 			local ValueBase: StringValue|NumberValue|BoolValue|Color3Value|BrickColorValue|Vector3Value|CFrameValue = categoryOrValueBase
-			local isColor3, isBrickColor, isVector3, isCFrame, isString, isNumber, isBoolean = CheckValueType(k, v)
-			if isColor3 then
-				ValueBase = Instance.new('Color3Value')
-				local color3 = string.split(newValue, '_Color3')[1]
-				local nameTable = string.split(color3, ', ')
-				newValue = Color3.new(nameTable[1], nameTable[2], nameTable[3])
-			elseif isBrickColor then
-				ValueBase = Instance.new('BrickColorValue')
-				local brickColor = string.split(newValue, '_BrickColor')[1]
-				newValue = BrickColor.new(brickColor)
-			elseif isVector3 then
-				ValueBase = Instance.new('Vector3Value')
-				local vector3 = string.split(newValue, '_Vector3')[1]
-				local nameTable = string.split(vector3, ', ')
-				newValue = Vector3.new(nameTable[1], nameTable[2], nameTable[3])
-			elseif isCFrame then
-				ValueBase = Instance.new('CFrameValue')
-				local cframe = string.split(newValue, '_CFrame')[1]
-				local nameTable = string.split(cframe, ', ')
-				newValue = CFrame.new(nameTable[1], nameTable[2], nameTable[3], nameTable[4], nameTable[5], nameTable[6], nameTable[7], nameTable[8], nameTable[9], nameTable[10], nameTable[11], nameTable[12])
-			elseif isString then
-				ValueBase = Instance.new('StringValue')
-			elseif isNumber then
-				ValueBase = Instance.new('NumberValue')
-			elseif isBoolean then
-				ValueBase = Instance.new('BoolValue')
+
+			if not ValueBase then
+				local isColor3, isBrickColor, isVector3, isCFrame, isString, isNumber, isBoolean = CheckValueType(k, v)
+				if isColor3 then
+					ValueBase = Instance.new('Color3Value')
+					local color3 = string.split(newValue, '_Color3')[1]
+					local nameTable = string.split(color3, ', ')
+					newValue = Color3.new(nameTable[1], nameTable[2], nameTable[3])
+				elseif isBrickColor then
+					ValueBase = Instance.new('BrickColorValue')
+					local brickColor = string.split(newValue, '_BrickColor')[1]
+					newValue = BrickColor.new(brickColor)
+				elseif isVector3 then
+					ValueBase = Instance.new('Vector3Value')
+					local vector3 = string.split(newValue, '_Vector3')[1]
+					local nameTable = string.split(vector3, ', ')
+					newValue = Vector3.new(nameTable[1], nameTable[2], nameTable[3])
+				elseif isCFrame then
+					ValueBase = Instance.new('CFrameValue')
+					local cframe = string.split(newValue, '_CFrame')[1]
+					local nameTable = string.split(cframe, ', ')
+					newValue = CFrame.new(nameTable[1], nameTable[2], nameTable[3], nameTable[4], nameTable[5], nameTable[6], nameTable[7], nameTable[8], nameTable[9], nameTable[10], nameTable[11], nameTable[12])
+				elseif isString then
+					ValueBase = Instance.new('StringValue')
+				elseif isNumber then
+					ValueBase = Instance.new('NumberValue')
+				elseif isBoolean then
+					ValueBase = Instance.new('BoolValue')
+				end
+				ValueBase.Parent = targetInstance
+				ValueBase.Name = k
+
+			else
+
+				local isColor3 = ValueBase:IsA('Color3Value')
+				local isBrickColor = ValueBase:IsA('BrickColorValue')
+				local isVector3 = ValueBase:IsA('Vector3Value')
+				local isCFrame = ValueBase:IsA('CFrameValue')
+				if isColor3 then
+					local color3 = string.split(newValue, '_Color3')[1]
+					local nameTable = string.split(color3, ', ')
+					newValue = Color3.new(nameTable[1], nameTable[2], nameTable[3])
+				elseif isBrickColor then
+					local brickColor = string.split(newValue, '_BrickColor')[1]
+					newValue = BrickColor.new(brickColor)
+				elseif isVector3 then
+					local vector3 = string.split(newValue, '_Vector3')[1]
+					local nameTable = string.split(vector3, ', ')
+					newValue = Vector3.new(nameTable[1], nameTable[2], nameTable[3])
+				elseif isCFrame then
+					local cframe = string.split(newValue, '_CFrame')[1]
+					local nameTable = string.split(cframe, ', ')
+					newValue = CFrame.new(nameTable[1], nameTable[2], nameTable[3], nameTable[4], nameTable[5], nameTable[6], nameTable[7], nameTable[8], nameTable[9], nameTable[10], nameTable[11], nameTable[12])
+				end
 			end
-			ValueBase.Parent = targetInstance
-			ValueBase.Name = k
 			ValueBase.Value = newValue
 
 		else
