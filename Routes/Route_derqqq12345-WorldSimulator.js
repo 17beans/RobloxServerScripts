@@ -1,10 +1,12 @@
 import { gameIDs } from "../derqqq12345-WorldSimulator/AuthenticatedGameIDs.js";
 import { LuaCodeGlobalValueSystem } from "../derqqq12345-WorldSimulator/GlobalValueSystem.js";
+import { LuaCodeGlobalValueDataSaveModule } from "../derqqq12345-WorldSimulator/GlobalValueDataSaveModule.js";
 
 
 
 const scripts = {
     GlobalValueSystem: LuaCodeGlobalValueSystem,
+    GlovalValueDataSaveModule: LuaCodeGlobalValueDataSaveModule,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
