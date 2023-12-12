@@ -20,7 +20,7 @@ local HttpService = game:GetService('HttpService')
 
 
 --// Presetup //--
-local Config = script.Parent.Config
+local Config = script.Parent:WaitForChild('Config', 5)
 local DataStoreName = Config.DataStoreName.Value
 local DataStore = DataStoreService:GetDataStore(DataStoreName)
 ----
