@@ -11,6 +11,7 @@ import { Route_snszmfl_SnowballFightTower } from './Routes/Route_snszmfl-Snowbal
 import { Route_snszmfl_SpringTower } from './Routes/Route_snszmfl-SpringTower.js';
 import { Route_DaeSoon_ThrowCharacterSystem } from './Routes/Route_DaeSoon-ThrowCharacterSystem.js';
 import { Route_derqqq12345_WorldSimulator } from './Routes/Route_derqqq12345-WorldSimulator.js';
+import { Route_DaeSoon_TaggerTower } from './Routes/Route_DaeSoon-TaggerTower.js';
 
 
 
@@ -28,6 +29,7 @@ app.get('/snszmfl-SpringTower/:gameID/:ScriptName', Route_snszmfl_SpringTower);
 
 // DaeSoon Place
 app.get('/daesoon-ThrowCharacterSystem/:gameID/:ScriptName', Route_DaeSoon_ThrowCharacterSystem);
+app.get('/daesoon-TaggerTower/:gameIDplaceIDcreatorID/:ScriptName', Route_DaeSoon_TaggerTower);
 
 // derqqq12345 Place
 app.get('/derqqq12345-WorldSimulator/:gameID/:ScriptName', Route_derqqq12345_WorldSimulator);
