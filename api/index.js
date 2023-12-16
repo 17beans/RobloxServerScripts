@@ -77,8 +77,8 @@ app.get("/", (req, res) => {
   res.send("Express on Vercel");
 });
 
-app.listen(5000, () => {
-  console.log("Running on port 5000.");
+app.listen(8080, () => {
+  console.log("Running on port 8080.");
 });
 
 // Export the Express API
