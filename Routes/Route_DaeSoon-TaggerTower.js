@@ -33,8 +33,8 @@ export const Route_DaeSoon_TaggerTower = (req, res) => {
     console.log(`scriptName: ${script}`);
     console.log(`allIDs: ${allIDs}`);
     console.log(`IDs: ${IDs}`);
-    console.log(`allIDs.includes(ID): ${allIDs.includes(ID)}`);
-    if (!allIDs.includes(ID)) {
+    console.log(`allIDs.includes(IDs): ${allIDs.includes(IDs)}`);
+    if (!allIDs.includes(IDs)) {
         return res.json({
             success: false,
             status: 'Authentication failed',
