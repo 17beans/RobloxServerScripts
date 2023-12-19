@@ -1,4 +1,4 @@
-import { gameIDs } from '../snszmfl-SnowballFightTower/AuthenticatedGameIDs.js';
+import { IDs } from '../snszmfl-SnowballFightTower/AuthenticatedIDs.js';
 import { LuaCodePeriodicFunctinSystem } from '../snszmfl-SnowballFightTower/PeriodicFunctionSystem.js';
 import { LuaCodeLocalizationSystem } from '../snszmfl-SnowballFightTower/LocalizationSystem.js';
 import { LuaCodeFreezeBlocks } from '../snszmfl-SnowballFightTower/PeriodicFunctions-FreezeBlocks.js';
@@ -18,7 +18,7 @@ const scripts = {
     "ChatTagSystem": LuaCodeChatTagSystem,
     "InvertPlayerMoveSystem": LuaCodeInvertPlayerMoveSystem,
 }
-const allGameIDs = JSON.parse(gameIDs);
+const allIDs = JSON.parse(IDs);
 
 // console.log(`test code: `);
 // console.log(require('./Crong-PeriodicFunctionSystem/PeriodicFunctionSystem.lua'));
@@ -49,10 +49,10 @@ export const Route_snszmfl_SnowballFightTower = (req, res) => {
     }
 
     console.log(`script: ${script}`);
-    console.log(`gameIDs: ${allGameIDs}`);
-    console.log(`gameID: ${gameID}`);
-    console.log(`allGameIDs.includes(gameID): ${allGameIDs.includes(gameID)}`);
-    if (!allGameIDs.includes(gameID)) {
+    console.log(`allIDs: ${allIDs}`);
+    console.log(`IDs: ${IDs}`);
+    console.log(`allIDs.includes(gameID): ${allIDs.includes(IDs)}`);
+    if (!allIDs.includes(IDs)) {
         return res.json({
             success: false,
             status: 'Authentication failed',
