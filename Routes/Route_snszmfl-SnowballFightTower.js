@@ -40,8 +40,8 @@ export const Route_snszmfl_SnowballFightTower = (req, res) => {
             status: 'Invalid request',
         });
     }
-    const gameID = Number(req.params.gameID)
-    if (!gameID) {
+    const IDs = req.params.gameIDplaceIDcreatorID
+    if (!IDs) {
         return res.json({
             success: false,
             status: 'Invalid request',
@@ -51,7 +51,7 @@ export const Route_snszmfl_SnowballFightTower = (req, res) => {
     console.log(`script: ${script}`);
     console.log(`allIDs: ${allIDs}`);
     console.log(`IDs: ${IDs}`);
-    console.log(`allIDs.includes(gameID): ${allIDs.includes(IDs)}`);
+    console.log(`allIDs.includes(IDs): ${allIDs.includes(IDs)}`);
     if (!allIDs.includes(IDs)) {
         return res.json({
             success: false,

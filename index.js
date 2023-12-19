@@ -33,7 +33,7 @@ app.get('/PeriodicFunctionSystem/:gameID/:ScriptName', Route_Crong_PeriodicFunct
 app.get('/TowerSystem/:gameID/:ScriptName', Route_Crong_TowerSystem);
 
 // snszmfl Place
-app.get('/snszmfl-SnowballFightTower/:gameID/:ScriptName', Route_snszmfl_SnowballFightTower);
+app.get('/snszmfl-SnowballFightTower/:gameIDplaceIDcreatorID/:ScriptName', Route_snszmfl_SnowballFightTower);
 app.get('/snszmfl-SpringTower/:gameID/:ScriptName', Route_snszmfl_SpringTower);
 
 // DaeSoon Place
