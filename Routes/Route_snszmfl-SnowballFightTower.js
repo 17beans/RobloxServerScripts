@@ -10,13 +10,13 @@ import { LuaCodeInvertPlayerMoveSystem } from '../snszmfl-SnowballFightTower/Inv
 
 
 const scripts = {
-    LocalizationSystem: LuaCodeLocalizationSystem,
-    PeriodicFunctionSystem: LuaCodePeriodicFunctinSystem,
-    FreezeBlocks: LuaCodeFreezeBlocks,
-    SnowballScript: LuaCodeSnowball,
-    DataStoreSystem: LuaCodeDataStoreSystem,
-    ChatTagSystem: LuaCodeChatTagSystem,
-    InvertPlayerMoveSystem: LuaCodeInvertPlayerMoveSystem,
+    "LocalizationSystem": LuaCodeLocalizationSystem,
+    "PeriodicFunctionSystem": LuaCodePeriodicFunctinSystem,
+    "FreezeBlocks": LuaCodeFreezeBlocks,
+    "SnowballScript": LuaCodeSnowball,
+    "DataStoreSystem": LuaCodeDataStoreSystem,
+    "ChatTagSystem": LuaCodeChatTagSystem,
+    "InvertPlayerMoveSystem": LuaCodeInvertPlayerMoveSystem,
 }
 const allGameIDs = JSON.parse(gameIDs);
 
