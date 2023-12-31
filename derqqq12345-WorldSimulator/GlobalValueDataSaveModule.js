@@ -101,7 +101,10 @@ local function SetDataStoreData(DataStore: DataStore, DataStoreKey: string, data
 
 	if not s then
 		warn(('[%s] SetDataStoreData error:'):format(script.Name), e)
+		return
 	end
+
+	print('데이터 저장 성공')
 end
 
 
@@ -166,6 +169,7 @@ local function GetStoredData()
 end
 
 local function SaveTargetFolderData()
+	print('데이터 저장 시도...')
 	local parsedDataStructure = ParseDataStructure({}, TargetFolder)[TargetFolder.Name]
 	local encoded = HttpService:JSONEncode(parsedDataStructure)
 	SetDataStoreData(DataStore, DataStoreName, encoded)
