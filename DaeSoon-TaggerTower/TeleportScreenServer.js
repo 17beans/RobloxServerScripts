@@ -14,7 +14,6 @@ export const LuaCodeTeleportScreenServer = `
 --// Services //--
 local Players = game:GetService('Players')
 local StarterGui = game:GetService('StarterGui')
-local TweenService = game:GetService('TweenService')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 ----
 
@@ -36,19 +35,6 @@ sgTeleportScreen.Parent = StarterGui
 --// Constants //--
 local fTeleportParts = workspace:WaitForChild('TeleportParts', 5)
 assert(fTeleportParts, '오류: Workspace에 TeleportParts 폴더가 없습니다.')
-local fBlackScreen = sgTeleportScreen['화면 가리게']
-
-local tweenFadeIn = TweenService:Create(
-	fBlackScreen,
-	TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.In),
-	{ BackgroundTransparency = 0 }
-)
-
-local tweenFadeOut = TweenService:Create(
-	fBlackScreen,
-	TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
-	{ BackgroundTransparency = 1 }
-)
 ----
 
 
@@ -73,27 +59,16 @@ BEvtTeleportScreenOn.Parent = ReplicatedStorage
 
 
 --// Functions //--
+local function SetupTeleportParts()
+	for _, Departure: Part in fTeleportParts:GetChildren() do
+		if Departure.Name ~= 'Departure' then continue end
+		if not Departure:IsA('BasePart') then continue end
+		local vDestination: ObjectValue = Departure:FindFirstChild('Destination')
+		if not vDestination then continue end
+		local partDestination: BasePart = vDestination.Value
+		if not partDestination then return end
 
-----
 
-
-
---// Setup //--
-
-----
-
-
-
---// Main //--
-for _, Departure: Part in fTeleportParts:GetChildren() do
-	if Departure.Name ~= 'Departure' then continue end
-	if not Departure:IsA('BasePart') then continue end
-	local vDestination: ObjectValue = Departure:FindFirstChild('Destination')
-	if not vDestination then continue end
-	local partDestination: BasePart = vDestination.Value
-	if not partDestination then return end
-
-	;(function()
 		local touchedDebounce = false
 		Departure.Touched:Connect(function(coll)
 			local character : Model= coll.Parent
@@ -111,6 +86,57 @@ for _, Departure: Part in fTeleportParts:GetChildren() do
 			BEvtTeleportScreenOn:Fire(player, partDestination)
 			touchedDebounce = false
 		end)
-	end)()
+	end
 end
+
+
+local function CheckAndRepairTeleportScreenGui(player: Player)
+
+	repeat task.wait() until player
+	local PlayerGui = player:FindFirstChildOfClass('PlayerGui')
+	repeat
+		task.wait()
+		PlayerGui = player:FindFirstChildOfClass('PlayerGui')
+	until PlayerGui
+
+	local sgPlayerTeleportScreen = PlayerGui:WaitForChild('PlayerTeleportScreen', 5)
+	if not sgPlayerTeleportScreen then
+		local Cloned_sgPlayerTeleportScreen: ScreenGui = sgPlayerTeleportScreen:Clone()
+		Cloned_sgPlayerTeleportScreen.Parent = PlayerGui
+	end
+
+end
+----
+
+
+
+--// Setup //--
+
+----
+
+
+
+--// Main //--
+SetupTeleportParts()
+
+local playerAdded = {}
+local function OnPlayerAdded(player: Player)
+	playerAdded[player] = true
+
+	CheckAndRepairTeleportScreenGui()
+end
+
+local function CheckPlayerAdded()
+	for _, player in pairs(game.Players:GetPlayers()) do
+		if playerAdded[player] then continue end
+		OnPlayerAdded(player)
+	end
+end
+
+local function OnPlayerRemoving(player: Player)
+	playerAdded[player] = nil
+end
+game.Players.PlayerAdded:Connect(OnPlayerAdded)
+game.Players.PlayerRemoving:Connect(OnPlayerRemoving)
+CheckPlayerAdded()
 ----`
