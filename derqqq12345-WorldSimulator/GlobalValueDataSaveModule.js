@@ -247,6 +247,7 @@ local function CreateDataStructure(parsedTable: {}, targetInstance: Folder|Strin
 			local ValueBase: StringValue|NumberValue|BoolValue|Color3Value|BrickColorValue|Vector3Value|CFrameValue = categoryOrValueBase
 
 			if not ValueBase then
+				print('값 생성')
 				local isColor3, isBrickColor, isVector3, isCFrame, isString, isNumber, isBoolean = CheckValueType(k, v)
 				if isColor3 then
 					ValueBase = Instance.new('Color3Value')
@@ -278,6 +279,7 @@ local function CreateDataStructure(parsedTable: {}, targetInstance: Folder|Strin
 				ValueBase.Name = k
 
 			else
+				print('값 변경')
 
 				local isColor3 = ValueBase:IsA('Color3Value')
 				local isBrickColor = ValueBase:IsA('BrickColorValue')
@@ -300,7 +302,9 @@ local function CreateDataStructure(parsedTable: {}, targetInstance: Folder|Strin
 					newValue = CFrame.new(nameTable[1], nameTable[2], nameTable[3], nameTable[4], nameTable[5], nameTable[6], nameTable[7], nameTable[8], nameTable[9], nameTable[10], nameTable[11], nameTable[12])
 				end
 			end
+			--print('기존 값: ', ValueBase.Value)
 			ValueBase.Value = newValue
+			--print('변경된 값: ', ValueBase.Value)
 
 		else
 			warn('Error in CreateDataStructure. typeof v: ', typeof(v))
@@ -356,16 +360,16 @@ end
 --local response = BFncResetDataStore:Invoke()
 --repeat task.wait() print('waiting...') until response
 
--- [Developer] DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
---SetupDataStructureToTargetFolder()
+-- DataStore 읽기 및 TargetFolder에 디렉토리 구조 생성
+SetupDataStructureToTargetFolder()
 
 
 task.spawn(function()
 	while true do
 		task.wait()
 
-		SaveTargetFolderData()
 		task.wait(INTERVAL_DATA_SAVE)
+		SaveTargetFolderData()
 	end
 end)
 ----`
