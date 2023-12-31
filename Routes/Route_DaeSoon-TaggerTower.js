@@ -1,10 +1,14 @@
 import { IDs } from "../DaeSoon-TaggerTower/AuthenticatedIDs.js";
 import { LuaCodeCharacterRandomDraw } from "../DaeSoon-TaggerTower/CharacterRandomDraw.js";
+import {LuaCodeTeleportScreenServer} from '../DaeSoon-TaggerTower/TeleportScreenServer.js'
+import {LuaCodeTeleportScreenGuiHandler} from '../DaeSoon-TaggerTower/TeleportScreenGuiHandler.js'
 
 
 
 const scripts = {
     "bean7189-CharacterRandomDraw": LuaCodeCharacterRandomDraw,
+    "TeleportScreenServer": LuaCodeTeleportScreenServer,
+    "TeleportScreenGuiHandler": LuaCodeTeleportScreenGuiHandler,
 }
 const allIDs = JSON.parse(IDs);
 
