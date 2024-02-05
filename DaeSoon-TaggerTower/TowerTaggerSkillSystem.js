@@ -389,7 +389,8 @@ local function OnPlayerAdded(player: Player)
 
 	-- 게임 접속 시 모든 스킬 버튼 비활성화
 	local PlayerGui = player:WaitForChild('PlayerGui')
-	local gui = PlayerGui:WaitForChild('TaggerTowerSkill')
+	local gui = PlayerGui:WaitForChild('TaggerTowerSkill', 20)
+	assert(gui, 'TaggerTowerSkill GUI가 발견되지 않았습니다.')
 	local fRightBar = gui:WaitForChild('RightBar')
 	for _, ImageButton: ImageButton in fRightBar:GetChildren() do
 		if not ImageButton:IsA('ImageButton') then continue end
