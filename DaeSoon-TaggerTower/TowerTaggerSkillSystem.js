@@ -352,7 +352,7 @@ end
 
 local function OnPlayerAdded(player: Player)
 	-- Developer test code
-	ResetData(player)
+	--ResetData(player)
 
 	table.insert(playerAddedPassed, player)
 
@@ -623,9 +623,12 @@ REvtPurchase.OnServerEvent:Connect(function(player, skillName: { 'Quake'|'Fire'|
 	local vPlayerCoin: NumberValue = fStats.Coin
 	if vCoin then
 		local newCoinAmount = vPlayerCoin.Value - vPrice.Value
+		-- 돈 부족
 		if newCoinAmount < 0 then
 			local message = PurchaseFinishedMessages[1][LocaleID]
 			REvtPurchase:FireClient(player, message)
+			playerPurchaseDebounce[player][skillName] = nil
+			return
 		end
 		-- 코인으로 구매
 		-- 돈 계산
@@ -654,4 +657,4 @@ REvtPurchase.OnServerEvent:Connect(function(player, skillName: { 'Quake'|'Fire'|
 	end
 	playerPurchaseDebounce[player][skillName] = nil
 end)
-----`
+-----`
