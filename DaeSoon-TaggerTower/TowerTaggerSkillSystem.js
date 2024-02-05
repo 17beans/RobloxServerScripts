@@ -351,8 +351,10 @@ end
 
 
 local function OnPlayerAdded(player: Player)
-	-- Developer test code
-	--ResetData(player)
+	-- ResetData if BoolValue.Value == true
+	if script.Config.ResetData.Value then
+		ResetData(player)
+	end
 
 	table.insert(playerAddedPassed, player)
 
