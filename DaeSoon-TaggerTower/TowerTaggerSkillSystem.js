@@ -102,9 +102,8 @@ local skillTranslate = {
 
 
 --// Remotes / Bindables //--
-local fTowerTaggerSkillSystem = ReplicatedStorage.TowerTaggerSkillSystem
-local fRemotes = fTowerTaggerSkillSystem.Remotes
-local fBindables = fTowerTaggerSkillSystem.Bindables
+local fRemotes = fTowerTaggerSkillSystemReplicated.Remotes
+local fBindables = fTowerTaggerSkillSystemReplicated.Bindables
 
 local REvtFireSkill: RemoteEvent = fRemotes.FireSkill
 local REvtCoolTime: RemoteEvent = fRemotes.CoolTime
@@ -277,10 +276,10 @@ local currentModule: { ['Execute']: ()->(), ['Cancel']: ()->() }
 --end
 
 
-local OnQuakeExecute = require(script.Parent.TowerTaggerSkillSystem.Skills.Quake.Quake).Execute
-local OnIceExecute = require(script.Parent.TowerTaggerSkillSystem.Skills.Ice.Ice).Execute
-local OnSnowExecute = require(script.Parent.TowerTaggerSkillSystem.Skills.Snow.Snow).Execute
-local OnFireExecute = require(script.Parent.TowerTaggerSkillSystem.Skills.Fire.Fire).Execute
+local OnQuakeExecute = require(fSkills.Quake.Quake).Execute
+local OnIceExecute = require(fSkills.Ice.Ice).Execute
+local OnSnowExecute = require(fSkills.Snow.Snow).Execute
+local OnFireExecute = require(fSkills.Fire.Fire).Execute
 
 
 local function SetData(player: Player)
