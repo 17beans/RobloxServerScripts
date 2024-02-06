@@ -71,8 +71,7 @@ local config = fTowerTaggerSkillSystemReplicated.Config
 local PERIODIC_FUNCTION_INTERVAL_MIN = config.PeriodicFunctionIntervalMin.Value
 local PERIODIC_FUNCTION_INTERVAL_MAX = config.PeriodicFunctionIntervalMax.Value
 local PERIODIC_FUNCTION_ALERT_TIME = config.PeriodicFunctionAlertTime.Value
-
-local TaggerTeamColor = script.Config.TaggerTeamColor
+local TaggerTeamColor = config.TaggerTeamColor.Value
 
 local fShelters = workspace.TowerTaggerSkillSystem.Shelters
 
