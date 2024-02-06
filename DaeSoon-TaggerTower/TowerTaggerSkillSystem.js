@@ -343,11 +343,13 @@ end
 
 local function SetupIsPurchasedOnPlayerAdded(player: Player, data: TypeData, vCoin: NumberValue, vEquippedSkill: StringValue, fPurchasedProducts: Folder)
 	vCoin.Value = data.Coin
-	if CheckPurchased(player, data.EquippedSkill) then
-		vEquippedSkill.Value = data.EquippedSkill
-	end
-	for _, vProduct: BoolValue in fPurchasedProducts:GetChildren() do
-		vProduct.Value =  data.PurchasedProducts[vProduct.Name]
+	if not data.EquippedSkill or data.EquippedSkill ~= '' then
+		if CheckPurchased(player, data.EquippedSkill) then
+			vEquippedSkill.Value = data.EquippedSkill
+		end
+		for _, vProduct: BoolValue in fPurchasedProducts:GetChildren() do
+			vProduct.Value =  data.PurchasedProducts[vProduct.Name]
+		end
 	end
 end
 
