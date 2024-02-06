@@ -504,6 +504,7 @@ CheckPlayerAddedPassedPlayer()
 
 
 REvtFireSkill.OnServerEvent:Connect(function(player, skillName: string)
+	if player.TeamColor ~= TaggerTeamColor then return end
 	if not playerSkillDebounces[player] then playerSkillDebounces[player] = {} end
 	if playerSkillDebounces[player][skillName] then return end
 	local fn = skillFunctions[skillName]
