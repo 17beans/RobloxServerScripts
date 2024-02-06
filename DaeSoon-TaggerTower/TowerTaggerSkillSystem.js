@@ -55,7 +55,6 @@ end
 
 --// Types //--
 type TypeData = {
-	['Coin']: number,
 	['PurchasedProducts']: {},
 	['EquippedSkill']: string
 }
@@ -72,6 +71,8 @@ local config = fTowerTaggerSkillSystemReplicated.Config
 local PERIODIC_FUNCTION_INTERVAL_MIN = config.PeriodicFunctionIntervalMin.Value
 local PERIODIC_FUNCTION_INTERVAL_MAX = config.PeriodicFunctionIntervalMax.Value
 local PERIODIC_FUNCTION_ALERT_TIME = config.PeriodicFunctionAlertTime.Value
+
+local TaggerTeamColor = script.Config.TaggerTeamColor
 
 local fShelters = workspace.TowerTaggerSkillSystem.Shelters
 
@@ -288,11 +289,9 @@ local function SetData(player: Player)
 	repeat
 		s, r = pcall(function()
 			local fStats = player:WaitForChild('Stats')
-			local vCoin: NumberValue = fStats.Coin
 			local vEquippedSkill: StringValue = fStats.EquippedSkill
 			local fPurchasedProducts: Folder = fStats.PurchasedProducts
 			local data: TypeData = {
-				['Coin'] = vCoin.Value,
 				['EquippedSkill'] = vEquippedSkill.Value,
 				['PurchasedProducts'] = {},
 			}
@@ -341,8 +340,7 @@ local function CheckPurchased(player: Player, skillName: {'Quake'|'Ice'|'Snow'|'
 	return vFound_Skill.Value
 end
 
-local function SetupIsPurchasedOnPlayerAdded(player: Player, data: TypeData, vCoin: NumberValue, vEquippedSkill: StringValue, fPurchasedProducts: Folder)
-	vCoin.Value = data.Coin
+local function SetupIsPurchasedOnPlayerAdded(player: Player, data: TypeData, vEquippedSkill: StringValue, fPurchasedProducts: Folder)
 	if not data.EquippedSkill or data.EquippedSkill ~= '' then
 		if CheckPurchased(player, data.EquippedSkill) then
 			vEquippedSkill.Value = data.EquippedSkill
@@ -384,7 +382,6 @@ local function OnPlayerAdded(player: Player)
 	local fStats = fDataTemplate:Clone()
 	fStats.Parent = player
 	fStats.Name = 'Stats'
-	local vCoin: NumberValue = fStats.Coin
 	local vEquippedSkill: StringValue = fStats.EquippedSkill
 	local fPurchasedProducts: Folder = fStats.PurchasedProducts
 
@@ -408,7 +405,6 @@ local function OnPlayerAdded(player: Player)
 		SetupIsPurchasedOnPlayerAdded(
 			player,
 			data,
-			vCoin,
 			vEquippedSkill,
 			fPurchasedProducts
 		)
@@ -595,6 +591,8 @@ local PurchaseFinishedMessages = {
 }
 local playerPurchaseDebounce = {}
 REvtPurchase.OnServerEvent:Connect(function(player, skillName: { 'Quake'|'Fire'|'Ice'|'Snow' })
+	if player.TeamColor ~= TaggerTeamColor then return end
+
 	if not playerPurchaseDebounce[player] then playerPurchaseDebounce[player] = {} end
 	if playerPurchaseDebounce[player][skillName] then return end
 	playerPurchaseDebounce[player][skillName] = true
@@ -627,7 +625,7 @@ REvtPurchase.OnServerEvent:Connect(function(player, skillName: { 'Quake'|'Fire'|
 		return
 	end
 
-	local vPlayerCoin: NumberValue = fStats.Coin
+	local vPlayerCoin: NumberValue = player.leaderstats.Cash
 	if vCoin then
 		local newCoinAmount = vPlayerCoin.Value - vPrice.Value
 		-- 돈 부족
