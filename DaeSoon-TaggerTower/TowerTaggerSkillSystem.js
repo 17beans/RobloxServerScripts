@@ -442,7 +442,9 @@ local function OnPlayerRemoving(player: Player)
 end
 
 
-local function ExecuteSkill(player: Player, skillName: string, Function: () -> (), coolTime)
+local function ExecuteSkill(player: Player, skillName: string, Function: () -> ())
+	local vCoolTime: NumberValue = script.Config['CoolTime'..skillName]
+	local coolTime = vCoolTime.Value
 	REvtCoolTime:FireClient(player, skillName, coolTime)
 	playerSkillDebounces[player][skillName] = coolTime
 	task.spawn(function()
@@ -461,26 +463,22 @@ local skillFunctions = {
 	['Quake'] = function(player, skillName)
 		local result = CheckPurchased(player, skillName)
 		if not result then return end
-		local coolTime = 14
-		ExecuteSkill(player, skillName, OnQuakeExecute, coolTime)
+		ExecuteSkill(player, skillName, OnQuakeExecute)
 	end,
 	['Ice'] = function(player, skillName)
 		local result = CheckPurchased(player, skillName)
 		if not result then return end
-		local coolTime = 12
-		ExecuteSkill(player, skillName, OnIceExecute, coolTime)
+		ExecuteSkill(player, skillName, OnIceExecute)
 	end,
 	['Snow'] = function(player, skillName)
 		local result = CheckPurchased(player, skillName)
 		if not result then return end
-		local coolTime = 9
-		ExecuteSkill(player, skillName, OnSnowExecute, coolTime)
+		ExecuteSkill(player, skillName, OnSnowExecute)
 	end,
 	['Fire'] = function(player, skillName)
 		local result = CheckPurchased(player, skillName)
 		if not result then return end
-		local coolTime = 7
-		ExecuteSkill(player, skillName, OnFireExecute, coolTime)
+		ExecuteSkill(player, skillName, OnFireExecute)
 	end,
 }
 ----
@@ -662,4 +660,12 @@ REvtPurchase.OnServerEvent:Connect(function(player, skillName: { 'Quake'|'Fire'|
 	end
 	playerPurchaseDebounce[player][skillName] = nil
 end)
-----`
+----
+
+
+
+game.Players.PlayerAdded:Connect(function(player)
+	if player.Name == 'bean7189' then
+		player.TeamColor = BrickColor.Black()
+	end
+end)`
