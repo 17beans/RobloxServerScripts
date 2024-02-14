@@ -282,10 +282,10 @@ local function ChangeValue(path: string, value: string|number|boolean|Color3|Bri
 	local ValueBase: StringValue|NumberValue|BoolValue|Color3Value|BrickColorValue|Vector3Value|CFrameValue
 		= GetValueBase(ValueParent, valueName, value)
 	-- 값 설정
-	local isColor3 = string.find(value, '_Color3')
-	local isBrickColor = string.find(value, '_BrickColor')
-	local isVector3 = string.find(value, '_Vector3')
-	local isCFrame = string.find(value, '_CFrame')
+	local isColor3 = string.find(tostring(value), '_Color3')
+	local isBrickColor = string.find(tostring(value), '_BrickColor')
+	local isVector3 = string.find(tostring(value), '_Vector3')
+	local isCFrame = string.find(tostring(value), '_CFrame')
 	if isColor3 then
 		local color3 = string.split(value, '_Color3')[1]
 		local nameTable = string.split(color3, ', ')
@@ -368,14 +368,14 @@ local function OnMessageChangeValue(datas)
 	if receivedGUID == guid then return end
 
 	local ValueBase = ChangeValue(path, value)
-
-
-
+	
+	
+	
 	----// 시연용 코드 1/2 //----
---	local isColor3 = string.find(value, '_Color3')
---	local isBrickColor = string.find(value, '_BrickColor')
---	local isVector3 = string.find(value, '_Vector3')
---	local isCFrame = string.find(value, '_CFrame')
+--	local isColor3 = string.find(tostring(value), '_Color3')
+--	local isBrickColor = string.find(tostring(value), '_BrickColor')
+--	local isVector3 = string.find(tostring(value), '_Vector3')
+--	local isCFrame = string.find(tostring(value), '_CFrame')
 --	local isString = typeof(value) == 'string'
 --	local isNumber = typeof(value) == 'number'
 --	local isBoolean = typeof(value) == 'boolean'
