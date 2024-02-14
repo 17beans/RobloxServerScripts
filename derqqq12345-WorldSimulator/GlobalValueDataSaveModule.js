@@ -104,7 +104,7 @@ local function SetDataStoreData(DataStore: DataStore, DataStoreKey: string, data
 		return
 	end
 
-	print('데이터 저장 성공')
+	--print('데이터 저장 성공')
 end
 
 
@@ -169,7 +169,7 @@ local function GetStoredData()
 end
 
 local function SaveTargetFolderData()
-	print('데이터 저장 시도...')
+	--print('데이터 저장 시도...')
 	local parsedDataStructure = ParseDataStructure({}, TargetFolder)[TargetFolder.Name]
 	local encoded = HttpService:JSONEncode(parsedDataStructure)
 	SetDataStoreData(DataStore, DataStoreName, encoded)
@@ -372,4 +372,8 @@ task.spawn(function()
 		SaveTargetFolderData()
 	end
 end)
+
+
+game.Close:Connect(SaveTargetFolderData)
+game:BindToClose(SaveTargetFolderData)
 ----`
