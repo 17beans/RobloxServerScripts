@@ -266,7 +266,7 @@ local function ChangeValue(path: string, value: string|number|boolean|Color3|Bri
 	assert(path, 'Invalid argument #1 path. string expected, got nil')
 	assert(typeof(path) == 'string', ('Invalid argument #1 path. string expected, got %s'):format(typeof(path)))
 
-	assert(value, 'Invalid argument #2 value. string expected, got nil.')
+	assert(value ~= nil, 'Invalid argument #2 value. string expected, got nil.')
 	assert(
 		typeof(value) == 'string'
 			or typeof(value) == 'number'
