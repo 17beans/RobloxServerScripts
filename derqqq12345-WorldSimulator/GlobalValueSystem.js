@@ -432,6 +432,7 @@ MessagingService:SubscribeAsync('ChangeValue', OnMessageChangeValue)
 
 BEvtChangeValue.Event:Connect(
 	function(path: string, value: string|number|boolean|Color3|BrickColor|Vector3|CFrame)
+		print('Request path: ', path)
 		local ValueBase = ChangeValue(path, value)
 		SendMessageChangeValue(ValueBase)
 	end)
