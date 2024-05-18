@@ -20,12 +20,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // test
-app.get('/', (req, res) => {
-    return res.json("server")
-});
-app.get('/test', (req, res) => {
-    return res.json("test")
-});
+// app.get('/', (req, res) => {
+//     return res.json("server")
+// });
+// app.get('/test', (req, res) => {
+//     return res.json("test")
+// });
 
 
 // Crong Place는 RobloxStudio 권한이 없기 때문에 접속 url을 변경할 수 없음
